@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ed40d77c-a7a3-4bac-b3f9-34355607f7e0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ColorLinesNG2</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Animations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)APIKeys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)APIKeysLocal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AStar\Node.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AStar\NodeState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AStar\PathFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AStar\SearchParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ColorLinesNG.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gesture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ILocalize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IStrings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformCulture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Strings.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tutorial.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Brown.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Cell.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Cyan.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Pink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Red.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Yellow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_Label.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_LabelLarge.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_LabelMedium.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_LabelSmall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_LabelMicro.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)CLNG_LabelLong.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings.ru.resx" />
+  </ItemGroup>
+</Project>

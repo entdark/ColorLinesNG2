@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.vlbor.ColorLinesNG" android:versionCode="2" android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="25" />
+	<application android:label="Color Lines NG"></application>
+</manifest>
