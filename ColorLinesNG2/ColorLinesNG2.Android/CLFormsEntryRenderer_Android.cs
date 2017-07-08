@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Text;
+
 using Java.Lang;
 
 [assembly: ExportRenderer(typeof(CLFormsEntry), typeof(CLFormsEntryRenderer_Android))]

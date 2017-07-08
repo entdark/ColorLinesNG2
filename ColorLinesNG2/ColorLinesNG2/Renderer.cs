@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+using OpenTK;
 using OpenTK.Graphics.ES20;
 
 using ColorLinesNG2;
@@ -107,24 +108,26 @@ namespace CLRenderer {
 	public class CLReEntity {
 		public CLReEntity Next;
 
-		public float []Verticies;
-		public Color Fill;
+		public float []Verticies { get; private set; }
+		public Color Fill { get; private set; }
+		public float Angle { get; private set; }
+		public bool Grayscale { get; private set; }
 
 		private float []textureCoords;
 		private int textureId;
 
-		private All type;
-		public All Type {
+		private BeginMode type;
+		public BeginMode Type {
 			get {
 				return this.type;
 			}
 			set {
-				if (value != All.TriangleStrip || value != All.TriangleFan)
-					value = All.TriangleStrip;
+				if (value != BeginMode.TriangleStrip || value != BeginMode.TriangleFan)
+					value = BeginMode.TriangleStrip;
 			}
 		}
 
-		public CLReEntity(float []verticies, Color fill, float []textureCoords, All type = All.TriangleStrip, int textureId = -1) {
+		public CLReEntity(float []verticies, Color fill, int textureId = -1, float[] textureCoords = null, BeginMode type = BeginMode.TriangleStrip, bool grayscale = false, float angle = 0.0f) {
 			this.Verticies = verticies;
 			this.Fill = fill;
 			this.type = type;
@@ -134,6 +137,8 @@ namespace CLRenderer {
 				this.textureCoords = CLReEntity.defaultTextureCoords;
 			else
 				this.textureCoords = textureCoords;
+			this.Grayscale = grayscale;
+			this.Angle = angle;
 		}
 		private static byte []ColorToBytes(Color c, uint size) {
 			byte []b = new byte[size*4];
@@ -158,9 +163,10 @@ namespace CLRenderer {
 		private static void Uniform4Color(int program, Color c) {
 			GL.Uniform4(program, (float)c.R, (float)c.G, (float)c.B, (float)c.A);
 		}
-		private static float []VirtualToOpenGLCoords(float []verticies, ColorLinesNG glView) {
-			float []ret = new float[verticies.Length];
-			for (int i = 0; i < verticies.Length; i+=2) {
+		private static float []VirtualToOpenGLCoords(float []verticies, ColorLinesNG glView, float angle) {
+			int length = verticies.Length;
+			float []ret = new float[length];
+			for (int i = 0; i < length; i+=2) {
 				float appVirtualWidth = glView.Right - glView.Left,
 				appVirtualHeight = glView.Top - glView.Bottom;
 				const float appOpenGLWidth = 2.0f,
@@ -172,16 +178,35 @@ namespace CLRenderer {
 				ret[i] = xAbsOpenGL-1.0f;
 				ret[i+1] = yAbsOpenGL-1.0f;
 			}
+			//apply to squares only 4*2
+			if (angle != 0.0f && length == 8) {
+				angle *= toRadCoef;
+				float s = (float)System.Math.Sin(-angle);
+				float c = (float)System.Math.Cos(-angle);
+				float wh = (ret[2]-ret[0])*0.5f;
+				float hh = (ret[5]-ret[3])*0.5f;
+				float x = ret[0]+wh;
+				float y = ret[1]+hh;
+				for (int i = 0; i < 4; i++) {
+					ret[i*2] = x+(c*1.0f*r[i][0]*wh+-s*glView.Top*r[i][1]*hh);
+					ret[i*2+1] = y+(s*glView.Ratio*r[i][0]*wh+c*1.0f*r[i][1]*hh);
+				}
+			}
 			return ret;
 		}
 		public void Render(int []programs, ColorLinesNG glView) {
 			if (this.textureId > 0) {
-				GL.UseProgram(programs[1]);
+				int program;
+				if (!this.Grayscale)
+					program = programs[1];
+				else
+					program = programs[2];
+				GL.UseProgram(program);
 
-				var position = GL.GetAttribLocation(programs[1], "position");
-				var color = GL.GetAttribLocation(programs[1], "color");
-				var texCoord = GL.GetAttribLocation(programs[1], "texCoord");
-				var ourTexture = GL.GetUniformLocation(programs[1], "ourTexture");
+				var position = GL.GetAttribLocation(program, "position");
+				var color = GL.GetAttribLocation(program, "color");
+				var texCoord = GL.GetAttribLocation(program, "texCoord");
+				var ourTexture = GL.GetUniformLocation(program, "ourTexture");
 				
 				GL.ActiveTexture(TextureUnit.Texture0);
 				GL.BindTexture(TextureTarget.Texture2D, this.textureId);
@@ -190,7 +215,7 @@ namespace CLRenderer {
 				GL.EnableVertexAttribArray(color);
 				GL.EnableVertexAttribArray(texCoord);
 				unsafe {
-					fixed (float *pvertices = CLReEntity.VirtualToOpenGLCoords(this.Verticies, glView)) {
+					fixed (float *pvertices = CLReEntity.VirtualToOpenGLCoords(this.Verticies, glView, this.Angle)) {
 						GL.VertexAttribPointer(position, 2, VertexAttribPointerType.Float, false, 0, new IntPtr(pvertices));
 					}
 					fixed (float *pcolours = ColorToFloats(this.Fill, 4)) {
@@ -215,11 +240,11 @@ namespace CLRenderer {
 
 				GL.EnableVertexAttribArray(position);
 				unsafe {
-					fixed (float *pvertices = CLReEntity.VirtualToOpenGLCoords(this.Verticies, glView)) {
+					fixed (float *pvertices = CLReEntity.VirtualToOpenGLCoords(this.Verticies, glView, 0.0f)) {
 						GL.VertexAttribPointer(position, 2, VertexAttribPointerType.Float, false, 0, new IntPtr(pvertices));
 					}
 				}
-				if (this.Type == All.TriangleStrip)
+				if (this.Type == BeginMode.TriangleStrip)
 					GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
 				else
 					GL.DrawArrays(BeginMode.TriangleFan, 0, (this.Verticies.Length)/2);
@@ -227,12 +252,20 @@ namespace CLRenderer {
 				GL.DisableVertexAttribArray(position);
 			}
 		}
-		private static float []defaultTextureCoords = {
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0,
+		private static float []defaultTextureCoords = new float []{
+			0.0f, 1.0f,
+			1.0f, 1.0f,
+			0.0f, 0.0f,
+			1.0f, 0.0f,
 		};
+		//signs
+		private static float [][]r = new float [][]{
+			new float []{ -1.0f, -1.0f },
+			new float []{ 1.0f, -1.0f },
+			new float []{ -1.0f, 1.0f },
+			new float []{ 1.0f, 1.0f },
+		};
+		private static float toRadCoef = (float)(System.Math.PI / 180.0);
 	}
 	public static class CLReDraw {
 		public static readonly Color WhiteColor = Color.FromRgba(1.0, 1.0, 1.0, 1.0);
@@ -251,19 +284,25 @@ namespace CLRenderer {
 				verticies[i*2+2] = xCentre + (float)Math.Cos(angle) * radius;
 				verticies[i*2+3] = yCentre + (float)Math.Sin(angle) * radius;
 			}
-			CLReQueue.AddToQueue(new CLReEntity(verticies, colour, null, All.TriangleFan));
+			CLReQueue.AddToQueue(new CLReEntity(verticies, colour, type: BeginMode.TriangleFan));
 		}
 		public static void Rect(float x, float y, float width, float height, Color colour) {
-			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour, textureCoords: null));
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour));
 		}
 		public static void Rect(float x, float y, float width, float height, int textureId, float []textureCoords) {
-			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId: textureId, textureCoords: textureCoords));
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId, textureCoords));
 		}
 		public static void Rect(float x, float y, float width, float height, int textureId) {
-			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId: textureId, textureCoords: null));
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId));
 		}
 		public static void Rect(float x, float y, float width, float height, int textureId, Color colour) {
-			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour, textureId: textureId, textureCoords: null));
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour, textureId));
+		}
+		public static void Rect(float x, float y, float width, float height, int textureId, bool grayscale) {
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId, grayscale: grayscale));
+		}
+		public static void Rect(float x, float y, float width, float height, int textureId, Color colour, float angle) {
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour, textureId, angle: angle));
 		}
 		public static void View(View view, float x, float y, float width, float height) {
 			CLReQueue.AddToQueue(new CLReViewEntity(view, x, y, width, height));

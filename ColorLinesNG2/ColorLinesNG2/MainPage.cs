@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace ColorLinesNG2 {
 	public class MainPage : ContentPage {
@@ -12,15 +11,11 @@ namespace ColorLinesNG2 {
 				BackgroundColor = Color.Transparent
 			};
 
-			var textures = new List<string>();
-			foreach (string cellColour in cellColours) {
-				textures.Add(string.Format("CLNG_{0}.png", cellColour));
-			}
 			View []hackyViews = null;
 			if (Settings.Taught) {
 				hackyViews = this.InitHackyViews();
 			}
-			this.Game = new ColorLinesNG(mainLayout, textures, hackyViews);
+			this.Game = new ColorLinesNG(mainLayout, hackyViews);
 
 			mainLayout.Children.Add(
 				this.Game.GameView,
@@ -72,6 +67,10 @@ namespace ColorLinesNG2 {
 			Content = backgroundLayout;
 		}
 
+		protected override bool OnBackButtonPressed() {
+			return !this.Game.OnBackButtonPressed() ? base.OnBackButtonPressed() : true;
+		}
+
 		private View []InitHackyViews() {
 			var colour = Color.FromRgba(0.0, 0.0, 0.0, 1.0);
 			var tapFieldBoxView = new BoxView() {
@@ -87,16 +86,16 @@ namespace ColorLinesNG2 {
 				TextColor = colour,
 				HorizontalTextAlignment = TextAlignment.End
 			};
-			var resultsLabel = new CLFormsLabel() {
-				Text = Strings.Results,
+			var menuLabel = new CLFormsLabel() {
+				Text = Strings.Menu,
 				TextColor = colour
 			};
 			var startLabel = new CLFormsLabel() {
 				Text = Strings.Restart,
 				TextColor = colour
 			};
-			var settingsLabel = new CLFormsLabel() {
-				Text = Strings.Settings,
+			var resultsLabel = new CLFormsLabel() {
+				Text = Strings.Results,
 				TextColor = colour
 			};
 			var nameEntry = new CLFormsEntry() {
@@ -105,7 +104,7 @@ namespace ColorLinesNG2 {
 //				IsVisible = false,
 				LettersLimit = 11
 			};
-			return new View []{ tapFieldBoxView, bestScoreLabel, userScoreLabel, resultsLabel, startLabel, settingsLabel, nameEntry };
+			return new View []{ tapFieldBoxView, bestScoreLabel, userScoreLabel, menuLabel, startLabel, resultsLabel, nameEntry };
 		}
 		private void AddHackyViews(RelativeLayout mainLayout, View []hackyViews) {
 			mainLayout.Children.Add(
@@ -230,22 +229,6 @@ namespace ColorLinesNG2 {
 				})
 			);
 		}
-
-		private static readonly string[] cellColours = {
-			"Cell",
-			"Red",
-			"Yellow",
-			"Green",
-			"Cyan",
-			"Blue",
-			"Pink",
-			"Brown",
-			"LabelMicro",
-			"LabelSmall",
-			"LabelMedium",
-			"LabelLong",
-			"LabelLarge",
-		};
 	}
 
 	public interface ICLForms {

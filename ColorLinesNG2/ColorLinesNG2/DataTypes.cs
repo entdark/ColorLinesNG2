@@ -21,11 +21,60 @@ namespace CLDataTypes {
 		CLMax,
 	}
 	public enum CLLabelSize {
+		CLCell,
 		CLMicro,
 		CLSmall,
 		CLMedium,
+		CLLong8,
 		CLLong,
 		CLLarge,
+		CLMax,
+	}
+	public enum CLAchievements {
+		CLBlow10,
+		CLBlow13,
+		CLScore500,
+		CLScore1000,
+		CLMax,
+	}
+	public enum CLBackgroundTextures {
+		CLStars,
+		CLNebula,
+		CLDefaultSmall,
+		CLStarsSmall,
+		CLNebulaSmall,
+		CLDefaultPreview,
+		CLStarsPreview,
+		CLNebulaPreview,
+		CLMax,
+	}
+	public enum CLBackgrounds {
+		CLDefault,
+		CLStars,
+		CLNebula,
+		CLMax,
+	}
+	public enum CLTextureTypes {
+		CLLabels,
+		CLBalls,
+		CLAchievements,
+		CLBackgrounds,
+		CLMax,
+	}
+	public enum CLBallSkins {
+		CLDefault,
+		CLAlt,
+		CLAlt2,
+		CLMax,
+	}
+	public enum CLTextures {
+		CLLabels,
+		CLDefault,
+		CLAlt,
+		CLAlt2,
+		CLAchievements,
+		CLBackgrounds,
+		CLMax,
 	}
 
 	public class CLLabel : IDisposable {
@@ -96,6 +145,7 @@ namespace CLDataTypes {
 				if (actionDelayed) {
 					return;
 				}
+				CLField.PlaySound("MenuNav.mp3");
 				actionDelayed = true;
 				Task.Run(async () => {
 					await Task.Delay(500);
@@ -113,6 +163,7 @@ namespace CLDataTypes {
 				if (actionDelayed) {
 					return;
 				}
+				CLField.PlaySound("MenuNav.mp3");
 				actionDelayed = true;
 				Task.Run(async () => {
 					await Task.Delay(500);
@@ -122,8 +173,8 @@ namespace CLDataTypes {
 			};
 			this.outTap.GestureRecognizers.Add(tapped);
 		}
-		public void Draw(int textureId, float []outBounds = null) {
-			CLReDraw.Rect(this.x, this.y, this.width, this.height, textureId);
+		public void Draw(int textureId, float []outBounds = null, bool grayscale = false) {
+			CLReDraw.Rect(this.x, this.y, this.width, this.height, textureId, grayscale);
 			if (!this.added) {
 				if (outBounds != null) {
 					float x = outBounds[0],
@@ -137,6 +188,9 @@ namespace CLDataTypes {
 				CLReDraw.View(this.label, this.x, this.y, this.width, this.height);
 				this.added = true;
 			}
+		}
+		public float []GetCoordinates() {
+			return new float []{ this.x, this.y, this.width, this.height };
 		}
 		public void Dispose() {
 			this.added = true;
@@ -153,9 +207,7 @@ namespace CLDataTypes {
 		public bool Check {
 			get { return this.check; }
 			set {
-				if (this.Checked != null) {
-					this.Checked(this, new CLCheckBoxEventArgs(value));
-				}
+				this.Checked?.Invoke(this, new CLCheckBoxEventArgs(value));
 				this.check = value;
 				Device.BeginInvokeOnMainThread(() => {
 					this.yn.Text = value ? Strings.Yes : Strings.No;
@@ -219,7 +271,6 @@ namespace CLDataTypes {
 			}
 		}
 
-		private string text;
 		private float x, y, width, height;
 		private Color textColour;
 		private TextAlignment align;
@@ -228,7 +279,6 @@ namespace CLDataTypes {
 		private bool added;
 
 		public CLCheckBox(bool check, string text, float x, float y, float width, float height, Color textColour, TextAlignment align, float textScale = 1.337f) {
-			this.text = text;
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -243,8 +293,10 @@ namespace CLDataTypes {
 			};
 			var tapped = new TapGestureRecognizer();
 			tapped.Tapped += (sender, ev) => {
-				if (this.IsEnabled)
+				if (this.IsEnabled) {
+					CLField.PlaySound("MenuNav.mp3");
 					this.Check = !this.Check;
+				}
 			};
 			this.label.GestureRecognizers.Add(tapped);
 			this.yn = new CLFormsLabel() {
@@ -389,14 +441,14 @@ namespace CLDataTypes {
 				return Color.FromRgba(127, 127, 127, 255);
 		}
 #endif
-		public void Draw(long time, float x, float y, float width, float height, int []fieldTextures, bool ignoreTapView = false) {
+		public void Draw(long time, float x, float y, float width, float height, int[] textures, bool ignoreTapView = false) {
 			if (!this.Selected) {
 //#if DEBUG
 //				CLReDraw.Rect(x, y, width, height, Color.FromRgba(127, 127, 127, 255));
 //#endif
-				CLReDraw.Rect(x, y, width, height, fieldTextures[0]);
+				CLReDraw.Rect(x, y, width, height, textures[0]);
 			} else {
-				CLReDraw.Rect(x, y, width, height, fieldTextures[0], new float[] {
+				CLReDraw.Rect(x, y, width, height, textures[0], new float[] {
 					1.0f, 0.0f,
 					0.0f, 0.0f,
 					1.0f, 1.0f,
@@ -449,22 +501,281 @@ namespace CLDataTypes {
 				} else if (this.appearing && delta > CLCell.AnimAppearing) {
 					this.appearing = false;
 				}*/
-				int index;
+				int textureId;
 				if (!tempNonBlowing) {
-					index = (int)this.Colour;
+					textureId = textures[1];
 				} else {
-					index = (int)this.OldColour;
+					textureId = textures[2];
 				}
-				int textureId = fieldTextures[index];
 				CLReDraw.Rect(x + dx, y + dy, width + dwidth, height + dheight, textureId);
 //#if DEBUG
-//				CLReDraw.Circle(x+width/2, y-height/2, (height > width) ? (width * 0.35f) : (height * 0.35f), CLColourToColor(this.colour));
+/*				if (this.Colour != CLColour.CLNone) {
+					delta = time;
+					Color col = CLColourToColor(this.colour).WithSaturation(1.0).WithLuminosity(0.75);
+					for (int i = 0; i < 7; i++) {
+						switch (i) {
+						default:
+						case 0:
+							dx = width*0.33f;
+							dy = height*0.4f;
+							break;
+						case 1:
+							dx = width*0.5f;
+							dy = height*0.4f;
+							break;
+						case 2:
+							dx = width*0.3f;
+							dy = height*0.6f;
+							break;
+						case 3:
+							dx = width*0.69f;
+							dy = height*0.64f;
+							break;
+						case 4:
+							dx = width*0.4f;
+							dy = height*0.5f;
+							break;
+						case 5:
+							dx = width*0.5f;
+							dy = height*0.69f;
+							break;
+						case 6:
+							dx = width*0.69f;
+							dy = height*0.3f;
+							break;
+						}
+						delta += 123*i;
+						while (delta > 2000) {
+							delta -= 2000;
+						}
+						float danim = 1.0f-CLAnim.Jump(delta, 2000);
+						CLReDraw.Rect(x + dx, y - dy, width*0.03f, height*0.03f, col.MultiplyAlpha(1.0f-danim));
+						danim *= 0.2f;
+//						CLReDraw.Circle(x+width/2, y-height/2, (height > width) ? (width * 0.4f) : (height * 0.4f), CLColourToColor(this.colour).MultiplyAlpha(0.2f-danim));
+					}
+				}*/
 //#endif
 			}
 /*			if (!this.added && !ignoreTapView) {
 				CLReDraw.View(this.tap, x, y, width, height);
 				this.added = true;
 			}*/
+		}
+	}
+	public class CLMenu : IDisposable {
+		public bool Show { get; set; } = false;
+
+		public Action OutAction;
+
+		private string titlePrev = null;
+		private float x, y, width, height;
+		private Action<float[],bool> drawContent, drawContentPrev = null;
+
+		CLFormsLabel titleLabel;
+		private View inTap, outTap;
+		bool added = false;
+
+		private CLMenu() {}
+		public CLMenu(string title, float x, float y, float width, float height, Action<float[],bool> drawContent) {
+			this.titleLabel = new CLFormsLabel() {
+				Text = title,
+				TextScale = 1.337f
+			};
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.drawContent = drawContent;
+			this.inTap = new BoxView() {
+				BackgroundColor = Color.Transparent
+			};
+			this.outTap = new BoxView() {
+				BackgroundColor = Color.Transparent
+			};
+			bool actionDelayed = false;
+			var tapped = new TapGestureRecognizer();
+			tapped.Tapped += (sender, ev) => {
+				if (actionDelayed) {
+					return;
+				}
+				actionDelayed = true;
+				Task.Run(async () => {
+					await Task.Delay(500);
+					actionDelayed = false;
+				});
+				//sync pop with game render loop
+				this.popping = true;
+			};
+			this.outTap.GestureRecognizers.Add(tapped);
+		}
+
+		public void Draw(int textureId, float[] outBounds) {
+			if (this.popping) {
+				this.popping = false;
+				this.Pop();
+			}
+			if (!this.Show)
+				return;
+			CLReDraw.Rect(this.x, this.y, this.width, this.height, textureId);
+			float dheight = this.height * 0.142857f; // / 7
+			if (!this.added) {
+				if (outBounds != null) {
+					float x = outBounds[0],
+						y = outBounds[3],
+						width = outBounds[1]-outBounds[0],
+						height = outBounds[3]-outBounds[2];
+					CLReDraw.View(this.outTap, x, y, width, height);
+				} else {
+					this.outTap = null;
+				}
+				CLReDraw.View(this.inTap, this.x, this.y, this.width, this.height);
+				CLReDraw.View(this.titleLabel, this.x, this.y-dheight*0.5f, this.width, dheight);
+				this.added = true;
+			}
+			if (!this.navigating)
+				this.drawContent?.Invoke(new float[] { this.x, this.y-dheight*1.5f, this.width, this.height-dheight*1.5f }, true);
+		}
+
+		public event EventHandler<EventArgs> Disposed;
+		public void Dispose() {
+			this.Disposed?.Invoke(this, new EventArgs());
+			CLReDraw.ReleaseView(this.titleLabel);
+			CLReDraw.ReleaseView(this.inTap);
+			CLReDraw.ReleaseView(this.outTap);
+		}
+
+		private bool navigating = false, popping = false;
+		public void Push(string title, Action<float[],bool> drawContent) {
+			this.navigating = true;
+			if (this.drawContentPrev != null)
+				return;
+			Device.BeginInvokeOnMainThread(() => {
+				this.titlePrev = this.titleLabel.Text;
+				this.titleLabel.Text = title;
+			});
+			this.drawContent(null, false);
+			this.drawContentPrev = this.drawContent;
+			this.drawContent = drawContent;
+			this.navigating = false;
+		}
+		public void Pop() {
+			this.navigating = true;
+			this.drawContent(null, false);
+			CLField.PlaySound("MenuNav.mp3");
+			this.drawContent = null;
+			if (this.drawContentPrev == null) {
+				this.Show = false;
+				this.Dispose();
+				this.navigating = false;
+				return;
+			}
+			Device.BeginInvokeOnMainThread(() => {
+				this.titleLabel.Text = this.titlePrev;
+				this.titlePrev = null;
+			});
+			this.drawContent = this.drawContentPrev;
+			this.drawContentPrev = null;
+			this.navigating = false;
+		}
+	}
+
+	public class CLAchievement {
+		public const int Blow10 = 10;
+		public const int Blow13 = 13;
+		public const int Score500 = 500;
+		public const int Score1000 = 1000;
+
+		public CLAchievements Id { get; set; }
+		public bool Achieved { get; set; }
+		public string Description { get; set; }
+		public string Unlocks { get; set; }
+
+		public static CLAchievement []FromSettings(string settings) {
+			var achievementStrings = settings.Split('\n');
+			CLAchievement []achievements = new CLAchievement[achievementStrings.Length];
+			int i = 0;
+			foreach (var achievementString in achievementStrings) {
+				var achievement = achievementString.Split('=');
+				achievements[i] = CLAchievement.FromNumber(int.Parse(achievement[0]));
+				achievements[i].Achieved = int.Parse(achievement[1]) != 0;
+				i++;
+			}
+			return achievements;
+		}
+		public static string ToSettings(CLAchievement []achievements) {
+			string achievementsString = null;
+			foreach (var achievement in achievements) {
+				if (achievementsString != null) {
+					achievementsString += "\n";
+				}
+				achievementsString +=
+					CLAchievement.ToNumber(achievement.Id)
+					+ "="
+					+ (achievement.Achieved ? "1" : "0");
+			}
+			return achievementsString;
+		}
+		public static bool GetAchieved(CLAchievement []achievements, CLAchievements id) {
+			foreach (var achievement in achievements) {
+				if (achievement.Id == id) {
+					return achievement.Achieved;
+				}
+			}
+			return false;
+		}
+		public static CLAchievement GetAchievement(CLAchievement []achievements, CLAchievements id) {
+			foreach (var achievement in achievements) {
+				if (achievement.Id == id) {
+					return achievement;
+				}
+			}
+			return null;
+		}
+
+		private static CLAchievement FromNumber(int number) {
+			CLAchievements id;
+			string description, unlocks;
+			switch (number) {
+			default:
+			case 10:
+				id = CLAchievements.CLBlow10;
+				description = Strings.Achieve10Desc;
+				unlocks = Strings.AchieveBlowReward;
+				break;
+			case 13:
+				id = CLAchievements.CLBlow13;
+				description = Strings.Achieve13Desc;
+				unlocks = Strings.AchieveBlowReward;
+				break;
+			case 500:
+				id = CLAchievements.CLScore500;
+				description = Strings.Achieve500Desc;
+				unlocks = Strings.AchieveScoreReward;
+				break;
+			case 1000:
+				id = CLAchievements.CLScore1000;
+				description = Strings.Achieve1000Desc;
+				unlocks = Strings.AchieveScoreReward;
+				break;
+			}
+			return new CLAchievement() {
+				Id = id,
+				Description = description,
+				Unlocks = unlocks
+			};
+		}
+		private static int ToNumber(CLAchievements id) {
+			switch (id) {
+			case CLAchievements.CLBlow10:
+				return 10;
+			case CLAchievements.CLBlow13:
+				return 13;
+			case CLAchievements.CLScore500:
+				return 500;
+			case CLAchievements.CLScore1000:
+				return 1000;
+			}
+			return 10;
 		}
 	}
 }

@@ -66,11 +66,83 @@ namespace ColorLinesNG2 {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ANIMATIONS.
-        /// </summary>
-        internal static string Animations {
+
+		/// <summary>
+		///   Looks up a localized string similar to POP 10 BALLS.
+		/// </summary>
+		internal static string Achieve10Desc {
+			get {
+				return ResourceManager.GetString("Achieve10Desc", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to POP 13 BALLS.
+		/// </summary>
+		internal static string Achieve13Desc {
+			get {
+				return ResourceManager.GetString("Achieve13Desc", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to SCORE 500 POINTS.
+		/// </summary>
+		internal static string Achieve500Desc {
+			get {
+				return ResourceManager.GetString("Achieve500Desc", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to SCORE 1000 POINTS.
+		/// </summary>
+		internal static string Achieve1000Desc {
+			get {
+				return ResourceManager.GetString("Achieve1000Desc", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to NEW BALL COLORS.
+		/// </summary>
+		internal static string AchieveBlowReward {
+			get {
+				return ResourceManager.GetString("AchieveBlowReward", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to NEW BACKGROUND.
+		/// </summary>
+		internal static string AchieveScoreReward {
+			get {
+				return ResourceManager.GetString("AchieveScoreReward", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to ACHIEVEMENT: .
+		/// </summary>
+		internal static string Achievement {
+			get {
+				return ResourceManager.GetString("Achievement", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to ACHIEVEMENTS.
+		/// </summary>
+		internal static string Achievements {
+			get {
+				return ResourceManager.GetString("Achievements", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to ANIMATIONS.
+		/// </summary>
+		internal static string Animations {
             get {
                 return ResourceManager.GetString("Animations", resourceCulture);
             }
@@ -84,11 +156,38 @@ namespace ColorLinesNG2 {
                 return ResourceManager.GetString("ApplicationName", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to COMPLETE A SIMPLE TUTORIAL.
-        /// </summary>
-        internal static string CompleteTutorial {
+
+		/// <summary>
+		///   Looks up a localized string similar to CURRENT BACKGROUND.
+		/// </summary>
+		internal static string BackgroundSelected {
+			get {
+				return ResourceManager.GetString("BackgroundSelected", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to CURRENT COLORS.
+		/// </summary>
+		internal static string BallsSkinSelected {
+			get {
+				return ResourceManager.GetString("BallsSkinSelected", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to UNLOCK ACHIEVEMENT: .
+		/// </summary>
+		internal static string CompleteAchievement {
+			get {
+				return ResourceManager.GetString("CompleteAchievement", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to COMPLETE A SIMPLE TUTORIAL.
+		/// </summary>
+		internal static string CompleteTutorial {
             get {
                 return ResourceManager.GetString("CompleteTutorial", resourceCulture);
             }
@@ -120,11 +219,29 @@ namespace ColorLinesNG2 {
                 return ResourceManager.GetString("ExitQ", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GAME OVER.
-        /// </summary>
-        internal static string GameOver {
+
+		/// <summary>
+		///   Looks up a localized string similar to REWARD UNLOCKED IN MENU -> GALLERY.
+		/// </summary>
+		internal static string FirstReward {
+			get {
+				return ResourceManager.GetString("FirstReward", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to GALLERY.
+		/// </summary>
+		internal static string Gallery {
+			get {
+				return ResourceManager.GetString("Gallery", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to GAME OVER.
+		/// </summary>
+		internal static string GameOver {
             get {
                 return ResourceManager.GetString("GameOver", resourceCulture);
             }
@@ -138,11 +255,29 @@ namespace ColorLinesNG2 {
                 return ResourceManager.GetString("Hi", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NAME:.
-        /// </summary>
-        internal static string Name {
+
+		/// <summary>
+		///   Looks up a localized string similar to MENU.
+		/// </summary>
+		internal static string Menu {
+			get {
+				return ResourceManager.GetString("Menu", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to MUSIC.
+		/// </summary>
+		internal static string Music {
+			get {
+				return ResourceManager.GetString("Music", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to NAME:.
+		/// </summary>
+		internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
             }
@@ -201,20 +336,56 @@ namespace ColorLinesNG2 {
                 return ResourceManager.GetString("Results", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ROUTE.
-        /// </summary>
-        internal static string Route {
+
+		/// <summary>
+		///   Looks up a localized string similar to REWARD: .
+		/// </summary>
+		internal static string Reward {
+			get {
+				return ResourceManager.GetString("Reward", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to REWARD IS LOCKED.
+		/// </summary>
+		internal static string RewardLocked {
+			get {
+				return ResourceManager.GetString("RewardLocked", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to ROUTE.
+		/// </summary>
+		internal static string Route {
             get {
                 return ResourceManager.GetString("Route", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SETTINGS.
-        /// </summary>
-        internal static string Settings {
+
+		/// <summary>
+		///   Looks up a localized string similar to SELECT THIS BACKGROUND.
+		/// </summary>
+		internal static string SelectBackground {
+			get {
+				return ResourceManager.GetString("SelectBackground", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to SELECT THESE COLORS.
+		/// </summary>
+		internal static string SelectBallsSkin {
+			get {
+				return ResourceManager.GetString("SelectBallsSkin", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to SETTINGS.
+		/// </summary>
+		internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
             }
@@ -228,11 +399,20 @@ namespace ColorLinesNG2 {
                 return ResourceManager.GetString("Skip", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to TAP ME.
-        /// </summary>
-        internal static string TapMe {
+
+		/// <summary>
+		///   Looks up a localized string similar to SOUNDS.
+		/// </summary>
+		internal static string Sounds {
+			get {
+				return ResourceManager.GetString("Sounds", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to TAP ME.
+		/// </summary>
+		internal static string TapMe {
             get {
                 return ResourceManager.GetString("TapMe", resourceCulture);
             }

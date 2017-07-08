@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
 
 using Xamarin.Forms;
-using OpenTK.Graphics.ES20;
 
+using CLDataTypes;
 using CLRenderer;
-using OpenTK;
 
+using OpenTK;
+using OpenTK.Graphics.ES20;
 #if __ANDROID__
 using Android.Graphics;
 using Android.Opengl;
@@ -25,6 +25,7 @@ namespace ColorLinesNG2 {
 		public float Top { get; private set; }
 		public float Left { get; private set; }
 		public float Right { get; private set; }
+		public float Ratio { get; private set; }
 
 		public OpenGLView GameView { get; private set; }
 		public bool Sleeping { get; set; }
@@ -36,13 +37,13 @@ namespace ColorLinesNG2 {
 		private int []textureIds;
 
 		private int []programs;
-		private int simpleProgram, textureProgram;
+		private int simpleProgram, textureProgram, textureGrayscaleProgram;
 
-		private int viewportWidth, viewportHeight;
+		public int viewportWidth, viewportHeight;
 
 		private Stopwatch time;
 
-		public ColorLinesNG(RelativeLayout mainLayout, List<string> textures, View []hackyViews = null) {
+		public ColorLinesNG(RelativeLayout mainLayout, View []hackyViews = null) {
 			this.Bottom = -1.0f;
 			this.Top = 1.0f;
 			this.Left = -1.0f;
@@ -64,11 +65,15 @@ namespace ColorLinesNG2 {
 					this.wentSleeping = false;
 				}
 				if (this.field == null) {
-					this.InitGL((int)re.Width, (int)re.Height, mainLayout, textures, hackyViews);
+					this.InitGL((int)re.Width, (int)re.Height, mainLayout, hackyViews);
 				}
 				this.Render();
 			};
 			this.Sleeping = false;
+		}
+
+		public bool OnBackButtonPressed() {
+			return this.field.OnBackButtonPressed();
 		}
 
 		private void Render() {
@@ -81,7 +86,7 @@ namespace ColorLinesNG2 {
 			this.reQueue.Render(this);
 		}
 
-		private void InitGL(int width, int height, RelativeLayout mainLayout, List<string> textures, View []hackyViews = null) {
+		private void InitGL(int width, int height, RelativeLayout mainLayout, View []hackyViews = null) {
 			this.viewportWidth = width;
 			this.viewportHeight = height;
 #region SIMPLE_PROGRAM
@@ -155,16 +160,58 @@ namespace ColorLinesNG2 {
 			GL.DeleteShader(vertexShader);
 			GL.DeleteShader(fragmentShader);
 #endregion
+#region TEXTURE_GRAYSCALE_PROGRAM
+			vertexShaderSrc = @"
+							  attribute vec4 position;
+							  attribute vec4 color;
+							  attribute vec2 texCoord;
+							  varying vec4 ourColor;
+							  varying vec2 ourTexCoord;
+
+							  void main()
+							  {
+								 gl_Position = position;
+								 ourTexCoord = texCoord;
+								 ourColor = color;
+							  }";
+
+			fragmentShaderSrc = @"
+									 varying lowp vec4 ourColor;
+									 varying lowp vec2 ourTexCoord;
+									 uniform sampler2D ourTexture;
+
+									 void main()
+									 {
+									   lowp vec4 color;
+									   lowp float grayscale;
+									   color = texture2D(ourTexture, ourTexCoord) * ourColor;
+									   grayscale = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+									   gl_FragColor = vec4(grayscale, grayscale, grayscale, color.a);
+									 }";
+
+			vertexShader = LoadShader(ShaderType.VertexShader, vertexShaderSrc);
+			fragmentShader = LoadShader(ShaderType.FragmentShader, fragmentShaderSrc);
+			this.textureGrayscaleProgram = GL.CreateProgram();
+			if (this.textureGrayscaleProgram == 0)
+				throw new InvalidOperationException("Unable to create program");
+
+			GL.AttachShader(this.textureGrayscaleProgram, vertexShader);
+			GL.AttachShader(this.textureGrayscaleProgram, fragmentShader);
+			
+			LinkProgram(this.textureGrayscaleProgram);
+
+			GL.DeleteShader(vertexShader);
+			GL.DeleteShader(fragmentShader);
+#endregion
 			this.programs = new int[] {
 				this.simpleProgram,
-				this.textureProgram
+				this.textureProgram,
+				this.textureGrayscaleProgram
 			};
 
 			GL.Viewport(0, 0, this.viewportWidth, this.viewportHeight);
 
 			this.SetScreenOpenGLCoords(this.viewportWidth, this.viewportHeight);
-
-			this.textureIds = new int[textures.Count];
 
 			GL.Enable(EnableCap.CullFace);
 			GL.CullFace(CullFaceMode.Back);
@@ -172,14 +219,44 @@ namespace ColorLinesNG2 {
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-			// create texture ids
-			GL.GenTextures(textures.Count, this.textureIds);
+			var textures = new string[embeddedTextures.Length][];
+			var textureIdsDouble = new int[embeddedTextures.Length][];
+			int i = 0, size = 0;
+			foreach (string[] texturesArray in embeddedTextures) {
+				textures[i] = new string[texturesArray.Length];
+				textureIdsDouble[i] = new int[texturesArray.Length];
+				int j = 0;
+				foreach (string texture in texturesArray) {
+					textures[i][j] = string.Format("CLNG_{0}.png", texture);
+					j++;
+					size++;
+				}
+				i++;
+			}
+			this.textureIds = new int[size];
 
-			for (int i = 0; i < textures.Count; i++) {
-				LoadTexture(textures[i], this.textureIds[i]);
+			// create texture ids
+			GL.GenTextures(size, this.textureIds);
+
+			for (i = 0; i < size; i++) {
+				int j = 0, sum = 0;
+				foreach (string[] texturesArray in embeddedTextures) {
+					int k = 0;
+					foreach (string texture in texturesArray) {
+						if (i == sum) {
+							LoadTexture(textures[j][k], this.textureIds[i]);
+							textureIdsDouble[j][k] = this.textureIds[i];
+						} else if (i < sum) {
+							break;
+						}
+						k++;
+						sum++;
+					}
+					j++;
+				}
 			}
 			
-			this.field = new CLField(this.textureIds);
+			this.field = new CLField(textureIdsDouble);
 			this.field.InitVisuals(this.Left, this.Right, this.Bottom, this.Top, this.time.ElapsedMilliseconds, hackyViews);
 			this.reQueue = new CLReQueue(mainLayout, this.programs);
 
@@ -192,11 +269,13 @@ namespace ColorLinesNG2 {
 				Bottom = -Top;
 				Right = (float)w / h;
 				Left = -Right;
+				Ratio = (float)h / w;
 			} else {
 				Top = (float)h / w;
 				Bottom = -Top;
 				Right = 1.0f;
 				Left = -Right;
+				Ratio = (float)w / h;
 			}
 		}
 
@@ -434,9 +513,9 @@ namespace ColorLinesNG2 {
 			string prefix;
 
 #if __ANDROID__
-			prefix = "ColorLinesNG2.Droid.";
+			prefix = "ColorLinesNG2.Droid.Resources.";
 #elif __IOS__
-			prefix = "ColorLinesNG2.iOS.";
+			prefix = "ColorLinesNG2.iOS.Resources.";
 #endif
 
 			var assembly = typeof(App).GetTypeInfo().Assembly;
@@ -454,5 +533,60 @@ namespace ColorLinesNG2 {
 			}
 			return data;
 		}
+
+		private static readonly string [][]embeddedTextures = new string [(int)CLTextures.CLMax][]{
+			new string [(int)CLLabelSize.CLMax]{
+				"Cell",
+				"LabelMicro",
+				"LabelSmall",
+				"LabelMedium",
+				"LabelLong8",
+				"LabelLong",
+				"LabelLarge",
+			},
+			new string [(int)CLColour.CLMax-1]{
+				"Red",
+				"Yellow",
+				"Green",
+				"Cyan",
+				"Blue",
+				"Pink",
+				"Brown",
+			},
+			new string [(int)CLColour.CLMax-1]{
+				"Magenta",
+				"Orange",
+				"Turquoise",
+				"CyanDark",
+				"Purple",
+				"Black",
+				"White",
+			},
+			new string [(int)CLColour.CLMax-1]{
+				"Sakura",
+				"Peach",
+				"Lime",
+				"Mint",
+				"Blueberry",
+				"Grape",
+				"Chocolate",
+			},
+			new string [(int)CLAchievements.CLMax]{
+				"Achievement10",
+				"Achievement13",
+				"Achievement500",
+				"Achievement1000",
+			},
+			new string [(int)CLBackgroundTextures.CLMax]{
+				"Stars",
+				"Nebula",
+				"DefaultSmall",
+				"StarsSmall",
+				"NebulaSmall",
+				"DefaultPreview",
+				"StarsPreview",
+				"NebulaPreview",
+			}
+		};
 	}
 }

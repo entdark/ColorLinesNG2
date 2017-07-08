@@ -22,7 +22,7 @@ namespace ColorLinesNG2.Droid {
 
 			if (this.Element == null) return;
 
-			float textSize = 12.0f / Resources.DisplayMetrics.Density * (float)Resources.DisplayMetrics.WidthPixels / 480.0f * (this.Element as ICLForms).TextScale;
+			float textSize = 11.7f / Resources.DisplayMetrics.Density * (float)Resources.DisplayMetrics.WidthPixels / 480.0f * (this.Element as ICLForms).TextScale;
 			this.Control.TextSize = textSize;
 		}
 

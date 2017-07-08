@@ -19,7 +19,8 @@ namespace CLAnimations {
 			this.parallel = parallel;
 		}
 		private static CLAnim anims;
-		public static void AddToQueue(CLAnim animAdd) {
+		public static void AddToQueue(CLAnim animAdd, bool parallel = false) {
+			animAdd.parallel = parallel;
 			if (CLAnim.anims == null) {
 				CLAnim.anims = animAdd;
 				return;

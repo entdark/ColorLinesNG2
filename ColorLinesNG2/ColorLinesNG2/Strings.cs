@@ -14,7 +14,71 @@ namespace ColorLinesNG2 {
 				}
 			}
 		}
-		
+
+		public static string Achieve10Desc {
+			get {
+				if (strings == null)
+					return StringsShared.Achieve10Desc;
+				return strings.Achieve10Desc;
+			}
+		}
+
+		public static string Achieve13Desc {
+			get {
+				if (strings == null)
+					return StringsShared.Achieve13Desc;
+				return strings.Achieve13Desc;
+			}
+		}
+
+		public static string Achieve500Desc {
+			get {
+				if (strings == null)
+					return StringsShared.Achieve500Desc;
+				return strings.Achieve500Desc;
+			}
+		}
+
+		public static string Achieve1000Desc {
+			get {
+				if (strings == null)
+					return StringsShared.Achieve1000Desc;
+				return strings.Achieve1000Desc;
+			}
+		}
+
+		public static string AchieveBlowReward {
+			get {
+				if (strings == null)
+					return StringsShared.AchieveBlowReward;
+				return strings.AchieveBlowReward;
+			}
+		}
+
+		public static string AchieveScoreReward {
+			get {
+				if (strings == null)
+					return StringsShared.AchieveScoreReward;
+				return strings.AchieveScoreReward;
+			}
+		}
+
+		public static string Achievement {
+			get {
+				if (strings == null)
+					return StringsShared.Achievement;
+				return strings.Achievement;
+			}
+		}
+
+		public static string Achievements {
+			get {
+				if (strings == null)
+					return StringsShared.Achievements;
+				return strings.Achievements;
+			}
+		}
+
 		public static string Animations {
 			get {
 				if (strings == null)
@@ -28,6 +92,30 @@ namespace ColorLinesNG2 {
 				if (strings == null)
 					return StringsShared.ApplicationName;
 				return strings.ApplicationName;
+			}
+		}
+
+		public static string BackgroundSelected {
+			get {
+				if (strings == null)
+					return StringsShared.BackgroundSelected;
+				return strings.BackgroundSelected;
+			}
+		}
+
+		public static string BallsSkinSelected {
+			get {
+				if (strings == null)
+					return StringsShared.BallsSkinSelected;
+				return strings.BallsSkinSelected;
+			}
+		}
+
+		public static string CompleteAchievement {
+			get {
+				if (strings == null)
+					return StringsShared.CompleteAchievement;
+				return strings.CompleteAchievement;
 			}
 		}
 
@@ -63,6 +151,22 @@ namespace ColorLinesNG2 {
 			}
 		}
 
+		public static string FirstReward {
+			get {
+				if (strings == null)
+					return StringsShared.FirstReward;
+				return strings.FirstReward;
+			}
+		}
+
+		public static string Gallery {
+			get {
+				if (strings == null)
+					return StringsShared.Gallery;
+				return strings.Gallery;
+			}
+		}
+
 		public static string GameOver {
 			get {
 				if (strings == null)
@@ -76,6 +180,22 @@ namespace ColorLinesNG2 {
 				if (strings == null)
 					return StringsShared.Hi;
 				return strings.Hi;
+			}
+		}
+
+		public static string Menu {
+			get {
+				if (strings == null)
+					return StringsShared.Menu;
+				return strings.Menu;
+			}
+		}
+
+		public static string Music {
+			get {
+				if (strings == null)
+					return StringsShared.Music;
+				return strings.Music;
 			}
 		}
 
@@ -135,11 +255,43 @@ namespace ColorLinesNG2 {
 			}
 		}
 
+		public static string Reward {
+			get {
+				if (strings == null)
+					return StringsShared.Reward;
+				return strings.Reward;
+			}
+		}
+
+		public static string RewardLocked {
+			get {
+				if (strings == null)
+					return StringsShared.RewardLocked;
+				return strings.RewardLocked;
+			}
+		}
+
 		public static string Route {
 			get {
 				if (strings == null)
 					return StringsShared.Route;
 				return strings.Route;
+			}
+		}
+
+		public static string SelectBackground {
+			get {
+				if (strings == null)
+					return StringsShared.SelectBackground;
+				return strings.SelectBackground;
+			}
+		}
+
+		public static string SelectBallsSkin {
+			get {
+				if (strings == null)
+					return StringsShared.SelectBallsSkin;
+				return strings.SelectBallsSkin;
 			}
 		}
 
@@ -156,6 +308,14 @@ namespace ColorLinesNG2 {
 				if (strings == null)
 					return StringsShared.Skip;
 				return strings.Skip;
+			}
+		}
+
+		public static string Sounds {
+			get {
+				if (strings == null)
+					return StringsShared.Sounds;
+				return strings.Sounds;
 			}
 		}
 

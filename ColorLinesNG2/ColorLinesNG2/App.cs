@@ -4,6 +4,7 @@ using Xamarin.Forms;
 
 namespace ColorLinesNG2 {
 	public class App : Application {
+		public static readonly IAudioManager AudioManager = DependencyService.Get<IAudioManager>();
 		private ColorLinesNG game;
 		public App() {
 /*			var assembly = typeof(App).GetTypeInfo().Assembly;
@@ -24,6 +25,7 @@ namespace ColorLinesNG2 {
 		protected override void OnSleep() {
 			// Handle when your app sleeps
 			this.game.Sleeping = true;
+			App.AudioManager.DeactivateAudioSession();
 			base.OnSleep();
 		}
 
@@ -31,6 +33,7 @@ namespace ColorLinesNG2 {
 			// Handle when your app resumes
 			this.game.Sleeping = false;
 			this.game.GameView.HasRenderLoop = true;
+			App.AudioManager.ReactivateAudioSession();
 			base.OnResume();
 		}
 	}
