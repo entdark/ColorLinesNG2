@@ -2736,7 +2736,7 @@ namespace ColorLinesNG2 {
 				this.popUpLabel.OutAction();
 				return true;
 			}
-			if (!this.menu.Show)
+			if (this.menu == null || !this.menu.Show)
 				return false;
 			this.menu.Pop();
 			return true;
