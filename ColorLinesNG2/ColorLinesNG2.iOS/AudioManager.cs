@@ -30,7 +30,7 @@ namespace ColorLinesNG2.iOS {
 			set {
 				this.soundsVolume = value;
 				if (this.sounds.Any()) {
-					foreach (var so in this.sounds.Values)
+					foreach (var so in this.sounds.Values.ToList())
 						so.Volume = this.soundsVolume;
 				}
 			}
@@ -57,7 +57,7 @@ namespace ColorLinesNG2.iOS {
 				if (this.soundsEnabled != value) {
 					this.soundsEnabled = value;
 					if (!value && this.sounds.Any()) {
-						foreach (var so in this.sounds.Values) {
+						foreach (var so in this.sounds.Values.ToList()) {
 							so.Stop();
 							so.PrepareToPlay();
 						}
@@ -97,7 +97,7 @@ namespace ColorLinesNG2.iOS {
 			this.StopBackgroundMusic();
 			this.backgroundMusic?.Dispose();
 			this.backgroundSong = filename;
-			this.backgroundMusic = NewSound(this.backgroundSong, this.backgroundMusicVolume, true);
+			this.backgroundMusic = this.NewSound(this.backgroundSong, this.backgroundMusicVolume, true);
 			this.backgroundMusic.Play();
 
 			this.backgroundMusicLoading = false;
@@ -132,7 +132,7 @@ namespace ColorLinesNG2.iOS {
 		}
 
 		private AVAudioPlayer NewSound(string filename, float defaultVolume, bool isLooping = false) {
-			using (var songUrl = new NSUrl(Path.Combine(SoundPath, filename))) {
+			using (var songUrl = new NSUrl(Path.Combine(this.SoundPath, filename))) {
 				NSError err;
 				var fileType = filename.Split('.').Last();
 				var sound = new AVAudioPlayer(songUrl, fileType, out err) {
@@ -154,7 +154,7 @@ namespace ColorLinesNG2.iOS {
 
 		private void PrecacheSound(string filename) {
 			if (!this.sounds.ContainsKey(filename)) {
-				this.sounds[filename] = NewSound(filename, this.soundsVolume);
+				this.sounds[filename] = this.NewSound(filename, this.soundsVolume);
 			}
 		}
 		public void PrecacheSounds(string []filenames) {
