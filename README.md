@@ -2,7 +2,7 @@
 A remake of the game "Color Lines" with a classic interface for Android, iOS and UWP using Xamarin, Xamarin Forms, OpenGL and Skia (SkiaSharp).
 
 ## Download
-[![Google play][2]][1] [![App Store][4]][3] [![Windows Store][5]][6]
+[![Google play][2]][1] [![App Store][4]][3] [![Windows Store][6]][5]
 
   [1]: https://play.google.com/store/apps/details?id=com.vlbor.ColorLinesNG&hl=en
   [2]: http://i.imgur.com/sJmg9Nj.png (Google play)
