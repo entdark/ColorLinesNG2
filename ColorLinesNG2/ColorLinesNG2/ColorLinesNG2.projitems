@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Animations.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)APIKeys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)APIKeysLocal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)APIKeys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AStar\Node.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AStar\NodeState.cs" />
@@ -26,10 +26,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)IStrings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformCulture.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RendererSkia.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RendererGL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Strings.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringsShared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tutorial.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,8 +73,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\CLNG_Yellow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings.resx" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Strings.ru.resx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\CLNG_Black.png">

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if __ANDROID__ || __IOS__
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -253,10 +254,10 @@ namespace CLRenderer {
 			}
 		}
 		private static float []defaultTextureCoords = new float []{
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			1.0f, 0.0f,
+			0.0f, 1.0f, //top left
+			1.0f, 1.0f, //top right
+			0.0f, 0.0f, //bottom left
+			1.0f, 0.0f, //bottom right
 		};
 		//signs
 		private static float [][]r = new float [][]{
@@ -273,7 +274,7 @@ namespace CLRenderer {
 		private const uint circleVerticies = 32;
 
 		private static float[] PosResToVerticies(float x, float y, float width, float height) {
-			return new float[8] { x, y-height, x+width, y-height, x, y, x+width, y };
+			return new float [8]{ x, y-height, x+width, y-height, x, y, x+width, y };
 		}
 		public static void Circle(float xCentre, float yCentre, float radius, Color colour) {
 			float []verticies = new float[(circleVerticies+2)*2]; //+2 verticies for centre and the same end point as the start one
@@ -416,3 +417,4 @@ namespace CLRenderer {
 		}
 	}
 }
+#endif

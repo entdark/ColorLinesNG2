@@ -49,7 +49,7 @@ namespace ColorLinesNG2.iOS {
 			control.AddGestureRecognizer(tapDetector);
 			tapDetector.Enabled = true;
 
-			OnElementPropertyChanged(new PropertyChangedEventArgs(String.Empty));
+			OnElementPropertyChanged(new PropertyChangedEventArgs(string.Empty));
 		}
 
 		protected override void OnDetached() {

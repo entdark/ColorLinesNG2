@@ -77,6 +77,23 @@ namespace CLDataTypes {
 		CLMax,
 	}
 
+    public struct CLPoint {
+		public int X { get; set; }
+		public int Y { get; set; }
+
+		public CLPoint(int x, int y) {
+			this.X = x;
+			this.Y = y;
+		}
+
+		public static bool operator ==(CLPoint left, CLPoint right) {
+			return left.X == right.X && left.Y == right.Y;
+		}
+		public static bool operator !=(CLPoint left, CLPoint right) {
+			return left.X != right.X || left.Y != right.Y;
+		}
+	}
+
 	public class CLLabel : IDisposable {
 		public string Text {
 			get {
@@ -145,13 +162,15 @@ namespace CLDataTypes {
 				if (actionDelayed) {
 					return;
 				}
-				CLField.PlaySound("MenuNav.mp3");
 				actionDelayed = true;
 				Task.Run(async () => {
 					await Task.Delay(500);
 					actionDelayed = false;
 				});
-				this?.Action?.Invoke();
+				if (this != null && this.Action != null) {
+					CLField.PlaySound("MenuNav.mp3");
+					this.Action();
+				}
 			};
 			this.label.GestureRecognizers.Add(tapped);
 			this.outTap = new BoxView() {
@@ -163,13 +182,15 @@ namespace CLDataTypes {
 				if (actionDelayed) {
 					return;
 				}
-				CLField.PlaySound("MenuNav.mp3");
 				actionDelayed = true;
 				Task.Run(async () => {
 					await Task.Delay(500);
 					actionDelayed = false;
 				});
-				this?.OutAction?.Invoke();
+				if (this != null && this.OutAction != null) {
+					CLField.PlaySound("MenuNav.mp3");
+					this.OutAction();
+				}
 			};
 			this.outTap.GestureRecognizers.Add(tapped);
 		}
@@ -448,12 +469,7 @@ namespace CLDataTypes {
 //#endif
 				CLReDraw.Rect(x, y, width, height, textures[0]);
 			} else {
-				CLReDraw.Rect(x, y, width, height, textures[0], new float[] {
-					1.0f, 0.0f,
-					0.0f, 0.0f,
-					1.0f, 1.0f,
-					0.0f, 1.0f,
-				});
+				CLReDraw.Rect(x, y, width, height, textures[0], 180.0f);
 			}
 			float dx = 0.0f, dy = 0.0f, dwidth = 0.0f, dheight = 0.0f;
 			long delta = time - this.AnimTime;

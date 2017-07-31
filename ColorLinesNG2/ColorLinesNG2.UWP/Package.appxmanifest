@@ -1,49 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
-
-  <Identity 
-	Name="2bd87ce2-aa7d-44f3-bc8a-b87df6f77080"
-	Publisher="CN=ent"
-	Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="f736c883-f105-4d30-a719-4bf328872f5e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="21354VlBor.46291C8C5B8C0" Publisher="CN=69D31301-80AB-4411-B2D7-15EE04299798" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="9828e41d-d051-4657-a707-029f4cb2e7d7" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-	<DisplayName>ColorLinesNG2.UWP</DisplayName>
-	<PublisherDisplayName>ent</PublisherDisplayName>
-	<Logo>Assets\StoreLogo.png</Logo>
+    <DisplayName>Color Lines NG</DisplayName>
+    <PublisherDisplayName>Vl Bor</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
-	<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+    <TargetDeviceFamily Name="Windows.Mobile" MinVersion="10.0.10049.0" MaxVersionTested="10.0.15063.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.10049.0" MaxVersionTested="10.0.15063.0" />
   </Dependencies>
-
   <Resources>
-	<Resource Language="x-generate"/>
+    <Resource Language="en-US" />
+    <Resource Language="ru-RU" />
   </Resources>
-
   <Applications>
-	<Application Id="App"
-		Executable="$targetnametoken$.exe"
-		EntryPoint="ColorLinesNG2.UWP.App">
-	  <uap:VisualElements
-		DisplayName="ColorLinesNG2.UWP"
-		Square150x150Logo="Assets\Square150x150Logo.png"
-		Square44x44Logo="Assets\Square44x44Logo.png"
-		Description="FPCL.WIndows"
-		BackgroundColor="transparent">
-		<uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
-		<uap:SplashScreen Image="Assets\SplashScreen.png" />
-	  </uap:VisualElements>
-	</Application>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ColorLinesNG2.UWP.App">
+      <uap:VisualElements DisplayName="ms-resource:DisplayName" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="ms-resource:Description" BackgroundColor="transparent">
+        <uap:DefaultTile Square310x310Logo="Assets\Square310x310Logo.png" Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+            <uap:ShowOn Tile="square310x310Logo" />
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="black" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait" />
+        </uap:InitialRotationPreference>
+      </uap:VisualElements>
+    </Application>
   </Applications>
-
   <Capabilities>
-	<Capability Name="internetClient" />
+    <Capability Name="internetClient" />
   </Capabilities>
 </Package>

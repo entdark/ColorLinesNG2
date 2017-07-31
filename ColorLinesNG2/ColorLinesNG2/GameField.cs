@@ -165,11 +165,11 @@ namespace ColorLinesNG2 {
 		private int ballsCount;
 		private int cellsCount;
 		private CLCell cells, selected;
-		private CLColour[] nextColours;
+		private CLColour []nextColours;
 
 		private int score;
 		private bool extraScore;
-		private string[,] scoresTable;
+		private string [,]scoresTable;
 
 		private bool teaching;
 		private bool teachingInit = false;
@@ -413,6 +413,7 @@ namespace ColorLinesNG2 {
 			this.DrawBackground();
 			//just add them - they are transparent, anyways
 			if (this.teaching && !this.teachingInit) {
+				this.teachingInit = true;
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLSmall);
 				this.bestScoreLabel.Draw(textureId);
 				this.userScoreLabel.Draw(textureId);
@@ -421,7 +422,6 @@ namespace ColorLinesNG2 {
 				this.resultsLabel.Draw(textureId);
 				CLReDraw.Rect(this.left, this.top, step*9, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
 				CLReDraw.Rect(this.left, this.bottom+step, step*9, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
-				this.teachingInit = true;
 			}
 			if (this.teaching && this.greetings) {
 				this.tutGreetingsLabel?.ExtraDraw();
@@ -678,16 +678,15 @@ namespace ColorLinesNG2 {
 				if (this.popUpAnimating)
 					return;
 				this.activeField = false;
-				if (this.popUpLabel != null) {
-					this.popUpLabel.Dispose();
-				}
+				this.popUpLabel?.Dispose();
 				float offset = step * 0.5f;
 				this.menu = new CLMenu(Strings.Menu, -1.0f+step, 1.0f-step, step*7.0f, step*7.0f, this.mainMenu);
+				this.menuLabel.Text = Strings.Back;
 				if (this.settings.Animations) {
 					this.activeField = false;
 					this.popUpAnimating = true;
-					float[] startRect = menuLabel.GetCoordinates();
-					float[] endRect = { -1.0f+step, 1.0f-step, step*7.0f, step*7.0f };
+					float []startRect = menuLabel.GetCoordinates();
+					float []endRect = { -1.0f+step, 1.0f-step, step*7.0f, step*7.0f };
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLarge);
 					CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 						bool ret = this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId);
@@ -703,6 +702,7 @@ namespace ColorLinesNG2 {
 					this.activeLabels = true;
 					if (this.popUpAnimating)
 						return;
+					this.menuLabel.Text = Strings.Menu;
 					if (this.settings.Animations) {
 						this.activeField = false;
 						this.popUpAnimating = true;
@@ -891,7 +891,8 @@ namespace ColorLinesNG2 {
 					this.settings.Music = this.musicCheckBox.Check;
 					Device.BeginInvokeOnMainThread(() => {
 						App.AudioManager.SoundsEnabled = this.settings.Sounds;
-						App.AudioManager.MusicEnabled = this.settings.Music;
+						if (App.AudioManager.MusicEnabled != this.settings.Music)
+							App.AudioManager.MusicEnabled = this.settings.Music;
 					});
 					this.settings.NextColours = this.nextColoursCheckBox.Check;
 					this.settings.Animations = this.animationsCheckBox.Check;
@@ -972,6 +973,7 @@ namespace ColorLinesNG2 {
 				}
 			};
 			CLLabel defaultSkin = null, altSkin = null, alt2Skin = null, defaultBg = null, starsBg = null, nebulaBg = null;
+			float[] xywhSelected = null, xywhSelected2 = null;
 			bool galleryMenuInited = false;
 			this.galleryMenu = (xywh, draw) => {
 				if (!draw) {
@@ -981,6 +983,8 @@ namespace ColorLinesNG2 {
 					defaultBg?.Dispose();
 					starsBg?.Dispose();
 					nebulaBg?.Dispose();
+					xywhSelected = null;
+					xywhSelected2 = null;
 					galleryMenuInited = false;
 					return;
 				}
@@ -1006,16 +1010,50 @@ namespace ColorLinesNG2 {
 					alt2Skin.Action = delegate() {
 						this.ShowSkinSelection(CLBallSkins.CLAlt2, alt2Skin.GetCoordinates());
 					};
-					defaultBg.Action = delegate () {
+					defaultBg.Action = delegate() {
 						this.ShowBackgroundSelection(CLBackgrounds.CLDefault, defaultBg.GetCoordinates());
 					};
-					starsBg.Action = delegate () {
+					starsBg.Action = delegate() {
 						this.ShowBackgroundSelection(CLBackgrounds.CLStars, starsBg.GetCoordinates());
 					};
-					nebulaBg.Action = delegate () {
+					nebulaBg.Action = delegate() {
 						this.ShowBackgroundSelection(CLBackgrounds.CLNebula, nebulaBg.GetCoordinates());
 					};
 				}
+				float border = 0.05f * step;
+				if (CLAchievement.GetAchieved(this.achievements, CLAchievements.CLBlow10)
+					|| CLAchievement.GetAchieved(this.achievements, CLAchievements.CLBlow13)) {
+					var ballsSkin = this.settings.BallsSkin;
+					if (ballsSkin == CLBallSkins.CLDefault) {
+						xywhSelected = defaultSkin.GetCoordinates();
+					} else if (ballsSkin == CLBallSkins.CLAlt) {
+						xywhSelected = altSkin.GetCoordinates();
+					} else {
+						xywhSelected = alt2Skin.GetCoordinates();
+					}
+					xywhSelected[0] -= border;
+					xywhSelected[1] += border;
+					xywhSelected[2] += (border * 2.0f);
+					xywhSelected[3] += (border * 2.0f);
+					CLReDraw.Rect(xywhSelected[0], xywhSelected[1], xywhSelected[2], xywhSelected[3], CLField.GreenColor);
+				}
+				if (CLAchievement.GetAchieved(this.achievements, CLAchievements.CLScore500)
+					|| CLAchievement.GetAchieved(this.achievements, CLAchievements.CLScore1000)) {
+					var background = this.settings.Background;
+					if (background == CLBackgrounds.CLDefault) {
+						xywhSelected2 = defaultBg.GetCoordinates();
+					} else if (background == CLBackgrounds.CLStars) {
+						xywhSelected2 = starsBg.GetCoordinates();
+					} else {
+						xywhSelected2 = nebulaBg.GetCoordinates();
+					}
+					xywhSelected2[0] -= border;
+					xywhSelected2[1] += border;
+					xywhSelected2[2] += (border * 2.0f);
+					xywhSelected2[3] += (border * 2.0f);
+					CLReDraw.Rect(xywhSelected2[0], xywhSelected2[1], xywhSelected2[2], xywhSelected2[3], CLField.GreenColor);
+				}
+
 				int cellTextureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLCell);
 				int textureId = this.GetTextureId(CLTextureTypes.CLBalls, CLColour.CLCyan, CLBallSkins.CLDefault);
 				float []xywh2 = defaultSkin.GetCoordinates();
@@ -1049,7 +1087,7 @@ namespace ColorLinesNG2 {
 				});
 				App.AudioManager.PlayBackgroundMusic("Music.mp3");
 				App.AudioManager.SoundsEnabled = this.settings.Sounds;
-				if (!this.settings.Taught) {
+				if (this.teaching) {
 					App.AudioManager.MusicEnabled = false;
 				} else {
 					App.AudioManager.MusicEnabled = this.settings.Music;
@@ -1453,7 +1491,7 @@ namespace ColorLinesNG2 {
 					list += "\n\n";
 				}
 				int dots = positionWidth - this.scoresTable[i,0].Length - this.scoresTable[i,1].Length - 4;
-				list += String.Format("{0,2}", (i+1).ToString()) + ". " + this.scoresTable[i,0];
+				list += string.Format("{0,2}", (i+1).ToString()) + ". " + this.scoresTable[i,0];
 				for (int j = 0; j < dots; j++)
 					list += ".";
 				list += this.scoresTable[i,1];
@@ -1788,13 +1826,13 @@ namespace ColorLinesNG2 {
 				if (cell == null)
 					break;
 			}
-			SearchParameters searchParameters = new SearchParameters(new System.Drawing.Point(from.Column, from.Row), new System.Drawing.Point(to.Column, to.Row), map);
+			SearchParameters searchParameters = new SearchParameters(new CLPoint(from.Column, from.Row), new CLPoint(to.Column, to.Row), map);
 			PathFinder pathFinder = new PathFinder(searchParameters);
 			var path = pathFinder.FindPath();
 			if (path.Count > 0) {
 				if (this.settings.Animations || this.teaching) {
-					var pathActual = new List<System.Drawing.Point>();
-					pathActual.Add(new System.Drawing.Point(from.Column, from.Row));
+					var pathActual = new List<CLPoint>();
+					pathActual.Add(new CLPoint(from.Column, from.Row));
 					pathActual.AddRange(path);
 					CLColour colour = from.Colour;
 					to.Moving = true;
@@ -1907,7 +1945,7 @@ namespace ColorLinesNG2 {
 			};
 			this.popUpLabel.Action = this.popUpLabel.OutAction = delegate() {
 				this.popUpLabel.Action = this.popUpLabel.OutAction = null;
-				this.activeLabels = true;
+				this.activeLabels = false;
 				if (this.popUpAnimating)
 					return;
 				this.activeField = false;
@@ -1919,7 +1957,7 @@ namespace ColorLinesNG2 {
 					this.popUpLabel = new CLLabel(Strings.Name, -1.0f+step*2, 1.0f-step*4, step*5, step, CLField.GreenColor, TextAlignment.Start);
 				bool entryRemoved = false;
 				Action action = delegate() {
-					this.activeLabels = true;
+					this.activeLabels = false;
 					if (this.popUpAnimating)
 						return;
 					if (!string.IsNullOrWhiteSpace(this.entry.Text)
@@ -1966,7 +2004,10 @@ namespace ColorLinesNG2 {
 //				this.popUpLabel.Action = this.popUpLabel.OutAction = action;
 				this.popUpLabel.ExtraDraw = delegate() {
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
-					this.popUpLabel.Draw(textureId/*, bounds*/);
+					if (Device.Idiom == TargetIdiom.Desktop)
+						this.popUpLabel.Draw(textureId, bounds);
+					else
+						this.popUpLabel.Draw(textureId/*, bounds*/);
 //					CLReDraw.View(this.entry, -1.0f+step*2.0f+xoffset, 1.0f-step*4, step*5, step);
 				};
 				var task = new Task(async () => {
@@ -2225,7 +2266,7 @@ namespace ColorLinesNG2 {
 			});
 			return false;
 		}
-		private bool AnimMoving(long start, long end, bool checkTime, CLColour colour, List<System.Drawing.Point> path) {
+		private bool AnimMoving(long start, long end, bool checkTime, CLColour colour, List<CLPoint> path) {
 			long dt = this.time-start,
 				 dr = end-start;
 			//start > this.time should never happen but let's be safe..

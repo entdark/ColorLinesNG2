@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Reflection;
+
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+
+using Microsoft.HockeyApp;
 
 namespace ColorLinesNG2.UWP {
 	/// <summary>
@@ -34,7 +29,7 @@ namespace ColorLinesNG2.UWP {
 		/// will be used such as when the application is launched to open a specific file.
 		/// </summary>
 		/// <param name="e">Details about the launch request and process.</param>
-		protected override void OnLaunched(LaunchActivatedEventArgs e) {
+		protected override void OnLaunched(LaunchActivatedEventArgs ev) {
 
 #if DEBUG
 			if (System.Diagnostics.Debugger.IsAttached)
@@ -53,9 +48,11 @@ namespace ColorLinesNG2.UWP {
 
 				rootFrame.NavigationFailed += OnNavigationFailed;
 
-				Xamarin.Forms.Forms.Init(e);
+				var assembliesToInclude = this.ReferenceAssemblies();
+				Xamarin.Forms.Forms.Init(ev, assembliesToInclude);
 
-				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated) {
+				HockeyClient.Current.Configure(APIKeys.HockeyAppUWP);
+				if (ev.PreviousExecutionState == ApplicationExecutionState.Terminated) {
 					//TODO: Load state from previously suspended application
 				}
 
@@ -67,7 +64,7 @@ namespace ColorLinesNG2.UWP {
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				rootFrame.Navigate(typeof(MainPage), e.Arguments);
+				rootFrame.Navigate(typeof(MainPage), ev.Arguments);
 			}
 			// Ensure the current window is active
 			Window.Current.Activate();
@@ -93,6 +90,52 @@ namespace ColorLinesNG2.UWP {
 			var deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity
 			deferral.Complete();
+		}
+
+		private List<Assembly> ReferenceAssemblies() {
+			List<Assembly> assembliesToInclude = new List<Assembly>();
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Label).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Entry).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.RelativeLayout).GetTypeInfo().Assembly);
+/*			assembliesToInclude.Add(typeof(Xamarin.Forms.StackLayout).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.View).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Color).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Keyboard).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Constraint).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.ContentPage).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Application).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Device).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.TargetIdiom).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Thickness).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.BoxView).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.NamedSize).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.TextAlignment).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.TapGestureRecognizer).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Easing).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Point).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Forms).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.BindableProperty).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Command).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Command<>).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.BindableObject).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.RoutingEffect).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.DependencyService).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Entry).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Entry).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(Xamarin.Forms.Entry).GetTypeInfo().Assembly);*/
+			assembliesToInclude.Add(typeof(Plugin.Settings.CrossSettings).GetTypeInfo().Assembly);
+/*			assembliesToInclude.Add(typeof(Plugin.Settings.Abstractions.ISettings).GetTypeInfo().Assembly);*/
+			assembliesToInclude.Add(typeof(HockeyClient).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKPaint).GetTypeInfo().Assembly);
+/*			assembliesToInclude.Add(typeof(SkiaSharp.SKColor).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKBitmap).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKCanvas).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKSurface).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKColorFilter).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKManagedStream).GetTypeInfo().Assembly);
+			assembliesToInclude.Add(typeof(SkiaSharp.SKBlendMode).GetTypeInfo().Assembly);*/
+			assembliesToInclude.Add(typeof(SkiaSharp.Views.Forms.SKGLView).GetTypeInfo().Assembly);
+			return assembliesToInclude;
 		}
 	}
 }

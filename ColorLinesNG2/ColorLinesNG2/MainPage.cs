@@ -36,33 +36,84 @@ namespace ColorLinesNG2 {
 				this.AddHackyViews(mainLayout, hackyViews);
 			}
 
-			backgroundLayout.Children.Add(
-				mainLayout,
-				Constraint.RelativeToParent(parent => {
-					return 0.0;
-				}),
-				Constraint.RelativeToParent(parent => {
-					switch (Device.RuntimePlatform) {
-					default:
-					case Device.Android:
+			bool desktop = Device.Idiom == TargetIdiom.Desktop;
+			if (!desktop) {
+				backgroundLayout.Children.Add(
+					mainLayout,
+					Constraint.RelativeToParent(parent => {
 						return 0.0;
-					case Device.iOS:
-						return 20.0;
-					}
-				}),
-				Constraint.RelativeToParent(parent => {
-					return parent.Width;
-				}),
-				Constraint.RelativeToParent(parent => {
-					switch (Device.RuntimePlatform) {
-					default:
-					case Device.Android:
-						return parent.Height;
-					case Device.iOS:
-						return parent.Height - 20.0;
-					}
-				})
-			);
+					}),
+					Constraint.RelativeToParent(parent => {
+						switch (Device.RuntimePlatform) {
+						default:
+						case Device.Android:
+							return 0.0;
+						case Device.iOS:
+							return 20.0;
+						}
+					}),
+					Constraint.RelativeToParent(parent => {
+						return parent.Width;
+					}),
+					Constraint.RelativeToParent(parent => {
+						switch (Device.RuntimePlatform) {
+						default:
+						case Device.Android:
+							return parent.Height;
+						case Device.iOS:
+							return parent.Height - 20.0;
+						}
+					})
+				);
+			} else {
+				backgroundLayout.Children.Add(
+					mainLayout,
+					Constraint.RelativeToParent(parent => {
+						double width;
+						if (parent.Width < App.MinDesktopWidth) {
+							width = App.MinDesktopWidth;
+						} else {
+							double height;
+							if ((parent.Height * App.MinDesktopRatio) > parent.Width) {
+								height = parent.Width / App.MinDesktopRatio;
+							} else {
+								height = parent.Height;
+							}
+							width = height * App.MinDesktopRatio;
+						}
+						return parent.Width * 0.5 - width * 0.5;
+					}),
+					Constraint.RelativeToParent(parent => {
+						if ((parent.Height * App.MinDesktopRatio) > parent.Width) {
+							return parent.Height * 0.5 - parent.Width / App.MinDesktopRatio * 0.5;
+						} else {
+							return 0.0;
+						}
+					}),
+					Constraint.RelativeToParent(parent => {
+						double width;
+						if (parent.Width < App.MinDesktopWidth) {
+							width = App.MinDesktopWidth;
+						} else {
+							double height;
+							if ((parent.Height * App.MinDesktopRatio) > parent.Width) {
+								height = parent.Width / App.MinDesktopRatio;
+							} else {
+								height = parent.Height;
+							}
+							width = height * App.MinDesktopRatio;
+						}
+						return width;
+					}),
+					Constraint.RelativeToParent(parent => {
+						if ((parent.Height * App.MinDesktopRatio) > parent.Width) {
+							return parent.Width / App.MinDesktopRatio;
+						} else {
+							return parent.Height;
+						}
+					})
+				);
+			}
 
 			Content = backgroundLayout;
 		}
@@ -257,6 +308,11 @@ namespace ColorLinesNG2 {
 				fontFamily = "PressStart2P";
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.84;
 				break;
+			case Device.WinPhone:
+			case Device.Windows:
+				fontFamily = "Assets/Fonts/PressStart2P.ttf#Press Start 2P";
+				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.5;
+				break;
 			}
 			this.FontFamily = fontFamily;
 			this.FontSize = namedSize;
@@ -302,6 +358,11 @@ namespace ColorLinesNG2 {
 			case Device.iOS:
 				fontFamily = "PressStart2P";
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.8;
+				break;
+			case Device.WinPhone:
+			case Device.Windows:
+				fontFamily = "Assets/Fonts/PressStart2P.ttf#Press Start 2P";
+				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.5;
 				break;
 			}
 			this.FontFamily = fontFamily;

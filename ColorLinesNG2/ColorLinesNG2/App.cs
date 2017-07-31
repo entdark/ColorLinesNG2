@@ -4,13 +4,16 @@ using Xamarin.Forms;
 
 namespace ColorLinesNG2 {
 	public class App : Application {
+		public const double MinDesktopWidth = 420.0;
+		public const double MinDesktopHeight = 768.0;
+		public const double MinDesktopRatio = 0.546875;
 		public static readonly IAudioManager AudioManager = DependencyService.Get<IAudioManager>();
 		private ColorLinesNG game;
 		public App() {
-/*			var assembly = typeof(App).GetTypeInfo().Assembly;
+			var assembly = typeof(App).GetTypeInfo().Assembly;
 			foreach (var res in assembly.GetManifestResourceNames()) {
 				System.Diagnostics.Debug.WriteLine("found resource: " + res);
-			}*/
+			}
 			Strings.Init();
 //			string localizedString = Strings.Yes;
 			var mainPage = new MainPage();

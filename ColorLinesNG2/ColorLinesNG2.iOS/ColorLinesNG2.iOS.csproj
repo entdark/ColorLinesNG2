@@ -120,7 +120,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="CLFormsEntryRenderer_iOS.cs" />
-    <Compile Include="StringsDependency.cs" />
     <BundleResource Include="..\ColorLinesNG2\Resources\PressStart2P.ttf">
       <Link>PressStart2P.ttf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -132,8 +131,6 @@
     <ITunesArtwork Include="iTunesArtwork@2x" />
     <None Include="packages.config" />
     <BundleResource Include="Resources\ru.lproj\InfoPlist.strings" />
-    <BundleResource Include="Resources\Base.lproj\Localizable.strings" />
-    <BundleResource Include="Resources\ru.lproj\Localizable.strings" />
     <BundleResource Include="Resources\Base.lproj\InfoPlist.strings" />
   </ItemGroup>
   <ItemGroup>

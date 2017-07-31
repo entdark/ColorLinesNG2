@@ -21,7 +21,7 @@ namespace ColorLinesNG2 {
 			}
 		}
 		private static GestureEffect GetOrCreateEffect(View view) {
-			var effect = (GestureEffect)view.Effects.FirstOrDefault(e => e is GestureEffect);
+			var effect = (GestureEffect)view.Effects.FirstOrDefault(ev => ev is GestureEffect);
 			if (effect == null) {
 				effect = new GestureEffect();
 				view.Effects.Add(effect);

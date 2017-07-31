@@ -10,6 +10,7 @@
 		string Achievements { get; }
 		string Animations { get; }
 		string ApplicationName { get; }
+		string Back { get; }
 		string BackgroundSelected { get; }
 		string BallsSkinSelected { get; }
 		string CompleteAchievement { get; }
