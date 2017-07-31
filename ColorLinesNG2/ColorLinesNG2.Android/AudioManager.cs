@@ -30,7 +30,7 @@ namespace ColorLinesNG2.Droid {
 			set {
 				this.soundsVolume = value;
 				if (this.sounds.Any()) {
-					foreach (var id in this.sounds.Values)
+					foreach (var id in this.sounds.Values.ToList())
 						this.soundPool.SetVolume(id, this.soundsVolume, this.soundsVolume);
 				}
 			}
@@ -57,7 +57,7 @@ namespace ColorLinesNG2.Droid {
 				if (this.soundsEnabled != value) {
 					this.soundsEnabled = value;
 					if (!value && this.sounds.Any()) {
-						foreach (var id in this.sounds.Values) {
+						foreach (var id in this.sounds.Values.ToList()) {
 							this.soundPool.Stop(id);
 						}
 					}
@@ -156,7 +156,7 @@ namespace ColorLinesNG2.Droid {
 
 		private async Task<int> NewSound(string filename, int priority = 0) {
 			if (!this.sounds.ContainsKey(filename)) {
-				using (var file = Forms.Context.Assets.OpenFd(Path.Combine(SoundPath, filename))) {
+				using (var file = Forms.Context.Assets.OpenFd(Path.Combine(this.SoundPath, filename))) {
 					return await this.soundPool.LoadAsync(file, priority);
 				}
 			}
@@ -165,7 +165,7 @@ namespace ColorLinesNG2.Droid {
 
 		private async Task PrecacheSound(string filename) {
 			if (!this.sounds.ContainsKey(filename)) {
-				int id = await NewSound(filename);
+				int id = await this.NewSound(filename);
 				if (id > 0)
 					this.sounds[filename] = id;
 			}
