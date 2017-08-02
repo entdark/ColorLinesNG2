@@ -1208,10 +1208,12 @@ namespace ColorLinesNG2 {
 				}
 			};
 			Action commonAction = delegate() {
+				if (this.popUpLabel == null)
+					return;
 				this.popUpLabel.Action = this.popUpLabel.OutAction = null;
-				this.activeField = true;
 				this.popUpLabel.Dispose();
 				this.popUpLabel = null;
+				this.activeField = true;
 				CLReDraw.ReleaseView(tapBallsLabel);
 				if (this.settings.Animations) {
 					this.activeField = false;
@@ -1228,6 +1230,8 @@ namespace ColorLinesNG2 {
 			Action inAction = delegate() {
 				if (this.popUpAnimating)
 					return;
+				if (this.popUpLabel == null)
+					return;
 				CLField.PlaySound("MenuNav.mp3");
 				if (selectSkin) {
 					this.popUpLabel.Text = Strings.BallsSkinSelected;
@@ -1243,6 +1247,8 @@ namespace ColorLinesNG2 {
 			};
 			Action outAction = delegate() {
 				if (this.popUpAnimating)
+					return;
+				if (this.popUpLabel == null)
 					return;
 				if (showSecondLocked) {
 					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
@@ -1356,10 +1362,12 @@ namespace ColorLinesNG2 {
 				}
 			};
 			Action commonAction = delegate() {
+				if (this.popUpLabel == null)
+					return;
 				this.popUpLabel.Action = this.popUpLabel.OutAction = null;
-				this.activeField = true;
 				this.popUpLabel.Dispose();
 				this.popUpLabel = null;
+				this.activeField = true;
 				CLReDraw.ReleaseView(tapBgLabel);
 				if (this.settings.Animations) {
 					this.activeField = false;
@@ -1381,6 +1389,8 @@ namespace ColorLinesNG2 {
 			Action inAction = delegate() {
 				if (this.popUpAnimating)
 					return;
+				if (this.popUpLabel == null)
+					return;
 				CLField.PlaySound("MenuNav.mp3");
 				if (selectBg) {
 					this.popUpLabel.Text = Strings.BackgroundSelected;
@@ -1396,6 +1406,8 @@ namespace ColorLinesNG2 {
 			};
 			Action outAction = delegate() {
 				if (this.popUpAnimating)
+					return;
+				if (this.popUpLabel == null)
 					return;
 				if (showSecondLocked) {
 					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
