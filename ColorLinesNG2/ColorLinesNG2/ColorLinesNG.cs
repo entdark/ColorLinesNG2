@@ -249,7 +249,7 @@ namespace ColorLinesNG2 {
 				this.textureGrayscaleProgram
 			};
 
-			GL.Viewport(0, 0, this.viewportWidth, this.viewportHeight);
+			GL.Viewport(0, 0, this.Width, this.Height);
 
 			this.SetScreenOpenGLCoords(this.Width, this.Height);
 
@@ -263,6 +263,7 @@ namespace ColorLinesNG2 {
 			float textureScale = this.Width * 0.00087f;
 
 			this.SetScreenOpenGLCoords(this.Width, this.Height);
+#endif
 
 			var textureIdsDouble = new int[embeddedTextures.Length][];
 			int i = 0, size = 0;
@@ -290,7 +291,7 @@ namespace ColorLinesNG2 {
 					foreach (var texture in texturesArray) {
 						if (i == sum) {
 #if __ANDROID__ || __IOS__
-							LoadTexture(textures[j][k], this.textureIds[i]);
+							LoadTexture(embeddedTextures[j][k].Name, this.textureIds[i]);
 							textureIdsDouble[j][k] = this.textureIds[i];
 #else //UWP
 							if (/*!embeddedTextures[j][k].InitIgnore || */Device.Idiom == TargetIdiom.Desktop) {
@@ -307,7 +308,6 @@ namespace ColorLinesNG2 {
 					j++;
 				}
 			}
-#endif
 			this.field = new CLField(textureIdsDouble);
 			this.field.InitVisuals(this.Left, this.Right, this.Bottom, this.Top, this.time.ElapsedMilliseconds, hackyViews);
 #if __ANDROID__ || __IOS__
@@ -382,7 +382,7 @@ namespace ColorLinesNG2 {
 				GL.DeleteProgram(program);
 				throw new InvalidOperationException("Unable to link program");
 			}
-		}*/
+		}
 #endif
 		private void RenderTest() {
 /*			var vertices = new float[] {

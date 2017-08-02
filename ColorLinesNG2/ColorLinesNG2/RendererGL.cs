@@ -128,7 +128,7 @@ namespace CLRenderer {
 			}
 		}
 
-		public CLReEntity(float []verticies, Color fill, int textureId = -1, float[] textureCoords = null, BeginMode type = BeginMode.TriangleStrip, bool grayscale = false, float angle = 0.0f) {
+		public CLReEntity(float []verticies, Color fill, int textureId = -1, float []textureCoords = null, BeginMode type = BeginMode.TriangleStrip, bool grayscale = false, float angle = 0.0f) {
 			this.Verticies = verticies;
 			this.Fill = fill;
 			this.type = type;
@@ -304,6 +304,9 @@ namespace CLRenderer {
 		}
 		public static void Rect(float x, float y, float width, float height, int textureId, Color colour, float angle) {
 			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), colour, textureId, angle: angle));
+		}
+		public static void Rect(float x, float y, float width, float height, int textureId, float angle) {
+			CLReQueue.AddToQueue(new CLReEntity(CLReDraw.PosResToVerticies(x, y, width, height), CLReDraw.WhiteColor, textureId, angle: angle));
 		}
 		public static void View(View view, float x, float y, float width, float height) {
 			CLReQueue.AddToQueue(new CLReViewEntity(view, x, y, width, height));
