@@ -1082,7 +1082,7 @@ namespace ColorLinesNG2 {
 		}
 		private void InitAudio() {
 			Device.BeginInvokeOnMainThread(() => {
-				App.AudioManager.PrecacheSounds(new[]{
+				App.AudioManager.PrecacheSounds(new []{
 					"Achievement.mp3", "Blocked.mp3", "Blow.mp3", "GameOver.mp3", "MenuNav.mp3", "Move.mp3", "NewRecord.mp3", "Selected.mp3"
 				});
 				App.AudioManager.PlayBackgroundMusic("Music.mp3");
