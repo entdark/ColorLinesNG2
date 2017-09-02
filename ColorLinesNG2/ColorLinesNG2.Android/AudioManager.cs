@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
@@ -146,36 +145,30 @@ namespace ColorLinesNG2.Droid {
 		public void PlaySound(string filename) {
 			if (!this.soundsEnabled)
 				return;
-			Task.Run(async () => {
-				await this.PrecacheSound(filename);
-				Device.BeginInvokeOnMainThread(() => {
-					this.soundPool.Play(this.sounds[filename], this.soundsVolume, this.soundsVolume, 0, 0, 1.0f);
-				});
-			});
+			this.PrecacheSound(filename);
+			this.soundPool.Play(this.sounds[filename], this.soundsVolume, this.soundsVolume, 0, 0, 1.0f);
 		}
 
-		private async Task<int> NewSound(string filename, int priority = 0) {
+		private int NewSound(string filename, int priority = 0) {
 			if (!this.sounds.ContainsKey(filename)) {
 				using (var file = Forms.Context.Assets.OpenFd(Path.Combine(this.SoundPath, filename))) {
-					return await this.soundPool.LoadAsync(file, priority);
+					return this.soundPool.LoadAsync(file, priority).Result;
 				}
 			}
 			return 0;
 		}
 
-		private async Task PrecacheSound(string filename) {
+		private void PrecacheSound(string filename) {
 			if (!this.sounds.ContainsKey(filename)) {
-				int id = await this.NewSound(filename);
+				int id = this.NewSound(filename);
 				if (id > 0)
 					this.sounds[filename] = id;
 			}
 		}
 		public void PrecacheSounds(string []filenames) {
-			Task.Run(async () => {
-				foreach (var filename in filenames) {
-					await this.PrecacheSound(filename);
-				}
-			});
+			foreach (var filename in filenames) {
+				this.PrecacheSound(filename);
+			}
 		}
 	}
 }
