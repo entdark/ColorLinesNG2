@@ -108,7 +108,7 @@ namespace ColorLinesNG2.UWP {
 			Task.Run(async () => {
 				var newSound = await this.NewSound(this.backgroundSong);
 				Device.BeginInvokeOnMainThread(() => {
-					this.backgroundMusic = new MediaElement {
+					this.backgroundMusic = new MediaElement() {
 						Volume = this.backgroundMusicVolume,
 						IsLooping = true,
 						AutoPlay = autoPlay,
