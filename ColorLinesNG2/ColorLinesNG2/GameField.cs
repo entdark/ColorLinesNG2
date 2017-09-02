@@ -532,7 +532,14 @@ namespace ColorLinesNG2 {
 			}
 			CLBackgroundTextures bg = CLField.GetBgTexture(this.settings.Background);
 			float danim = CLAnim.Jump(delta, CLField.AnimBackgroundFlashDuration);
-			CLReDraw.Rect(-2.0f, 2.0f, 4.0f, 4.0f, this.GetTextureId(CLTextureTypes.CLBackgrounds, bg), CLField.WhiteColor.MultiplyAlpha(0.5f+0.5f*danim), 69.0f+23.0f*this.time*0.00002f);
+			int textureId = this.GetTextureId(CLTextureTypes.CLBackgrounds, bg);
+			Color fill = CLField.WhiteColor.MultiplyAlpha(0.5f + 0.5f * danim);
+			float angle = 69.0f + 23.0f * this.time * 0.00002f;
+			if (Device.Idiom != TargetIdiom.Desktop) {
+				CLReDraw.Rect(-2.0f, 2.0f, 4.0f, 4.0f, textureId, fill, angle);
+			} else {
+				CLReDraw.Rect(-2.5f, 2.5f, 5.0f, 5.0f, textureId, fill, angle);
+			}
 		}
 
 		private int AddScore(int ballsCount) {

@@ -132,14 +132,14 @@ namespace CLRenderer {
 		public Color? Fill { get; private set; }
 		public float Angle { get; private set; }
 		public bool Grayscale { get; private set; }
+		public int TextureId { get; private set; }
 
 		private float []textureCoords;
-		private int textureId;
 
 		private CLReEntity() {}
 		public CLReEntity(float []verticies, int textureId = -1, Color? fill = null, float []textureCoords = null, bool grayscale = false, float angle = 0.0f) {
 			this.Verticies = verticies;
-			this.textureId = textureId;
+			this.TextureId = textureId;
 			this.Fill = fill;
 			this.textureCoords = textureCoords;
 			this.Grayscale = grayscale;
@@ -159,8 +159,8 @@ namespace CLRenderer {
 					yAbsVirtual = (skiaView.Top - verticies[i+1]) / appVirtualHeight;
 				float xAbsSkia = xAbsVirtual * appSkiaWidth,
 					yAbsSkia = yAbsVirtual * appSkiaHeight;
-				ret[i] = xAbsSkia;
-				ret[i+1] = yAbsSkia;
+				ret[i] = skiaView.X + xAbsSkia;
+				ret[i+1] = skiaView.Y + yAbsSkia;
 			}
 			//TODO: make proper clipping bounds
 			if (textureCoords != null) {
@@ -190,24 +190,24 @@ namespace CLRenderer {
 				canvas.Save();
 				canvas.RotateDegrees(this.Angle, destRect.MidX, destRect.MidY);
 			}
-			if (this.textureId >= 0) {
-				if (images[this.textureId] == null) {
-					if (!loadingTextures.Contains(this.textureId)) {
-						loadingTextures.Add(this.textureId);
+			if (this.TextureId >= 0) {
+				if (images[this.TextureId] == null) {
+					if (!loadingTextures.Contains(this.TextureId)) {
+						loadingTextures.Add(this.TextureId);
 						Task.Run(async () => {
-							images[this.textureId] = await skiaView.LoadTexture(this.textureId);
-							loadingTextures.Remove(this.textureId);
+							images[this.TextureId] = await skiaView.LoadTexture(this.TextureId);
+							loadingTextures.Remove(this.TextureId);
 						});
 					}
 					return;
 				}
 				if (this.Grayscale) {
-					CLReEntity.CanvasDrawImage(canvas, images[this.textureId], destRect, srcRect, paintGrayscale);
+					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect, srcRect, paintGrayscale);
 				} else if (this.Fill != null) {
 					texturePaint.ColorFilter = SKColorFilter.CreateBlendMode(CLReEntity.ColorToSKColor((Color)this.Fill), SKBlendMode.Modulate);
-					CLReEntity.CanvasDrawImage(canvas, images[this.textureId], destRect, srcRect, texturePaint);
+					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect, srcRect, texturePaint);
 				} else {
-					CLReEntity.CanvasDrawImage(canvas, images[this.textureId], destRect);
+					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect);
 				}
 			} else {
 				rectPaint.Color = CLReEntity.ColorToSKColor((Color)this.Fill);
@@ -301,15 +301,37 @@ namespace CLRenderer {
 		}
 
 		private RelativeLayout mainLayout;
-		private CLReQueue() { }
+		private CLReQueue() {}
 		private SKImage []images;
-		public CLReQueue(RelativeLayout mainLayout, SKImage []images) {
+		private int []specialBgTextureIds;
+		public CLReQueue(RelativeLayout mainLayout, SKImage []images, int []specialBgTextureIds) {
 			this.mainLayout = mainLayout;
 			this.images = images;
+			this.specialBgTextureIds = specialBgTextureIds;
 		}
 		public void Render(ColorLinesNG skiaView, SKCanvas canvas) {
 			CLReEntity r = rentities;
-			for (; r != null; r = r.Next) r.Render(this.images, skiaView, canvas);
+			int renderSpecialBgTexture = 0;
+			for (; r != null; r = r.Next) {
+				r.Render(this.images, skiaView, canvas);
+				if (Device.Idiom != TargetIdiom.Desktop
+					|| renderSpecialBgTexture != 0
+					|| this.specialBgTextureIds == null
+					|| this.specialBgTextureIds.Length < 2)
+					continue;
+				if (r.TextureId == this.specialBgTextureIds[0]) {
+					renderSpecialBgTexture = 1;
+				} else if (r.TextureId == this.specialBgTextureIds[1]) {
+					renderSpecialBgTexture = 2;
+				}
+			}
+			if (renderSpecialBgTexture == 1) {
+				CLReQueue.RenderFadingCircle(canvas, skiaView);
+			} else if (renderSpecialBgTexture == 2) {
+				CLReQueue.RenderFades(canvas, skiaView, false);
+				CLReQueue.RenderFades(canvas, skiaView, true);
+				CLReQueue.RenderFadingCircle(canvas, skiaView);
+			}
 			CLReViewEntity v = ventities;
 			for (; v != null; v = v.Next) v.Render(this.mainLayout, skiaView);
 			CLReViewEntity vre = ventitiesToRelease;
@@ -369,6 +391,86 @@ namespace CLRenderer {
 			}
 			next.Next = null;
 			notRemoved.Clear();
+		}
+
+		private const float wc = 1.337f;
+		private static readonly SKPaint fadePaint = new SKPaint();
+		private static readonly SKColor []fadingGradient3 = new SKColor[3]{
+			new SKColor(0, 0, 0, 255),
+			new SKColor(0, 0, 0, 166),
+			new SKColor(0, 0, 0, 0)
+		};
+		private static readonly float []fadingPos3 = new float[3]{
+			0.72f,
+			0.89f,
+			1.0f
+		};
+		private static void RenderFades(SKCanvas canvas, ColorLinesNG skiaView, bool right) {
+			float width = skiaView.Width * wc;
+			float xoffset, pxs, pxe;
+			if (!right) {
+				xoffset = skiaView.X - width;
+				pxs = xoffset;
+				pxe = skiaView.X;
+			} else {
+				xoffset = skiaView.X + skiaView.Width;
+				pxs = xoffset + width;
+				pxe = xoffset;
+			}
+			var fadeRect = SKRect.Create(xoffset, skiaView.Y, width, skiaView.Height);
+			using (var shader = SKShader.CreateLinearGradient(
+				new SKPoint(pxs, fadeRect.MidY),
+				new SKPoint(pxe, fadeRect.MidY),
+				fadingGradient3,
+				fadingPos3,
+				SKShaderTileMode.Clamp
+			)) {
+				fadePaint.Shader = shader;
+				canvas.DrawRect(fadeRect, fadePaint);
+			}
+		}
+		private static readonly SKPaint cutPaint = new SKPaint() {
+			Color = new SKColor(0, 0, 0, 255),
+			Style = SKPaintStyle.Fill
+		};
+		private static void RenderCuts(SKCanvas canvas, ColorLinesNG skiaView) {
+			float x = skiaView.X - skiaView.Width * wc;
+			float midy = skiaView.Y + skiaView.Height * 0.5f;
+			float y = midy - skiaView.Width * (0.5f + wc);
+			float width = skiaView.X + skiaView.Width * (1.0f + wc) - x;
+			float height = skiaView.Y - y;
+			var topRect = SKRect.Create(x, y, width, height);
+			y = skiaView.Y + skiaView.Height;
+			var bottomRect = SKRect.Create(x, y, width, height);
+			canvas.DrawRect(topRect, cutPaint);
+			canvas.DrawRect(bottomRect, cutPaint);
+		}
+		private static readonly SKColor []fadingGradient2 = new SKColor[2]{
+			new SKColor(0, 0, 0, 0),
+			new SKColor(0, 0, 0, 255)
+		};
+		private static readonly float []fadingPos2 = new float[2]{
+			0.57f,
+			0.66f
+		};
+		private static void RenderFadingCircle(SKCanvas canvas, ColorLinesNG skiaView) {
+			float midx = skiaView.X + skiaView.Width * 0.5f;
+			float midy = skiaView.Y + skiaView.Height * 0.5f;
+			float x = skiaView.X - skiaView.Width * wc;
+			float y = midy - skiaView.Width * (0.5f + wc);
+			float width = skiaView.X + skiaView.Width * (1.0f + wc) - x;
+			float height = midy + skiaView.Width * (1.0f + wc) - y;
+			var fadeRect = SKRect.Create(x, y, width, height);
+			using (var shader = SKShader.CreateRadialGradient(
+				new SKPoint(midx, midy),
+				width * 0.5f,
+				fadingGradient2,
+				fadingPos2,
+				SKShaderTileMode.Clamp
+			)) {
+				fadePaint.Shader = shader;
+				canvas.DrawRect(fadeRect, fadePaint);
+			}
 		}
 	}
 }

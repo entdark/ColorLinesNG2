@@ -32,6 +32,8 @@ namespace ColorLinesNG2 {
 		public float Left { get; private set; }
 		public float Right { get; private set; }
 		public float Ratio { get; private set; }
+		public int X { get; private set; }
+		public int Y { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
@@ -89,8 +91,24 @@ namespace ColorLinesNG2 {
 				EnableTouchEvents = false
 			};
 			this.GameView.PaintSurface += (sender, ev) => {
-				this.Width = ev.RenderTarget.Width;
-				this.Height = ev.RenderTarget.Height;
+				if (Device.Idiom == TargetIdiom.Desktop) {
+					int width = ev.RenderTarget.Width;
+					int height = ev.RenderTarget.Height;
+					if ((height * App.MinDesktopRatio) > width) {
+						this.Width = width;
+						this.Height = (int)(width / App.MinDesktopRatio);
+					} else {
+						this.Width = (int)(height * App.MinDesktopRatio);
+						this.Height = height;
+					}
+					this.X = (int)(width * 0.5f - this.Width * 0.5f);
+					this.Y = (int)(height * 0.5f - this.Height * 0.5f);
+				} else {
+					this.X = 0;
+					this.Y = 0;
+					this.Width = ev.RenderTarget.Width;
+					this.Height = ev.RenderTarget.Height;
+				}
 				if (this.field == null) {
 					this.InitGL(mainLayout, hackyViews);
 				}
@@ -114,12 +132,12 @@ namespace ColorLinesNG2 {
 			this.reQueue.Render(this);
 		}
 #else //UWP
-		private static SKColor colorBg = new SKColor(0, 0, 0, 255);
+		private static readonly SKColor bgColor = new SKColor(0, 0, 0, 255);
 		private void Render(SKCanvas canvas) {
 			this.reQueue.Clear();
 			this.field.Draw(this.time.ElapsedMilliseconds);
 
-			canvas.Clear(colorBg);
+			canvas.Clear(bgColor);
 
 			this.reQueue.Render(this, canvas);
 		}
@@ -282,6 +300,7 @@ namespace ColorLinesNG2 {
 			GL.GenTextures(size, this.textureIds);
 #else //UWP
 			this.images = new SKImage[size];
+			int []specialBgTextureIds = new int[2];
 #endif
 			for (i = 0; i < size; i++) {
 				int j = 0, sum = 0;
@@ -297,6 +316,11 @@ namespace ColorLinesNG2 {
 								this.images[i] = LoadTexture(embeddedTextures[j][k], textureScale);
 							}
 							textureIdsDouble[j][k] = i;
+							if (embeddedTextures[j][k].Name.Equals("CLNG_Stars.png")) {
+								specialBgTextureIds[0] = i;
+							} else if (embeddedTextures[j][k].Name.Equals("CLNG_Nebula.png")) {
+								specialBgTextureIds[1] = i;
+							}
 #endif
 						} else if (i < sum) {
 							break;
@@ -313,7 +337,7 @@ namespace ColorLinesNG2 {
 #if __ANDROID__ || __IOS__
 			this.reQueue = new CLReQueue(mainLayout, this.programs);
 #else //UWP
-			this.reQueue = new CLReQueue(mainLayout, this.images);
+			this.reQueue = new CLReQueue(mainLayout, this.images, specialBgTextureIds);
 #endif
 
 			this.time.Start();
