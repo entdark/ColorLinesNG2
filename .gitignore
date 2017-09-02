@@ -38,6 +38,12 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
 *_i.c
 *_p.c
 *_i.h
@@ -142,6 +148,9 @@ publish/
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
 
 # Windows Azure Build Output
 csx/
@@ -149,6 +158,10 @@ csx/
 
 # Windows Store app package directory
 AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
 
 # Others
 *.[Cc]ache
