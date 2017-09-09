@@ -31,7 +31,7 @@ namespace ColorLinesNG2 {
 		private CLField field;
 
 		private int []textureIds;
-		private SKImage []images;
+		private static SKImage []images;
 		private Stopwatch time;
 
 		public ColorLinesNG(RelativeLayout mainLayout, View []hackyViews = null) {
@@ -104,11 +104,18 @@ namespace ColorLinesNG2 {
 				i++;
 			}
 			this.textureIds = new int[size];
-			this.images = new SKImage[size];
 			bool loadTexture = /*!embeddedTextures[j][k].InitIgnore || */
 				Device.RuntimePlatform == Device.Android ||
 				Device.RuntimePlatform == Device.iOS ||
 				Device.Idiom == TargetIdiom.Desktop;
+			//when the app is restarted (Android only for now)
+			//then we cannot reload embedded resources
+			//so we store them static and won't reload afterward
+			if (ColorLinesNG.images == null) {
+				ColorLinesNG.images = new SKImage[size];
+			} else {
+				loadTexture = false;
+			}
 			int []specialBgTextureIds = new int[2];
 			for (i = 0; i < size; i++) {
 				int j = 0, sum = 0;
@@ -136,7 +143,7 @@ namespace ColorLinesNG2 {
 			}
 			this.field = new CLField(textureIdsDouble);
 			this.field.InitVisuals(this.Left, this.Right, this.Bottom, this.Top, this.time.ElapsedMilliseconds, hackyViews);
-			this.reQueue = new CLReQueue(mainLayout, this.images, specialBgTextureIds);
+			this.reQueue = new CLReQueue(mainLayout, ColorLinesNG.images, specialBgTextureIds);
 
 			this.time.Start();
 		}
@@ -159,7 +166,7 @@ namespace ColorLinesNG2 {
 
 		public Task<SKImage> LoadTexture(int textureId) {
 			float textureScale = this.Width * 0.00087f;
-			int size = this.images.Length;
+			int size = ColorLinesNG.images.Length;
 			int i = 0, sum = 0;
 			foreach (var texturesArray in embeddedTextures) {
 				int j = 0;
