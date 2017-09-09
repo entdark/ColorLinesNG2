@@ -7,12 +7,14 @@ namespace ColorLinesNG2 {
 		public const double MinDesktopWidth = 420.0;
 		public const double MinDesktopHeight = 768.0;
 		public const double MinDesktopRatio = 0.546875;
-		public static readonly IAudioManager AudioManager = DependencyService.Get<IAudioManager>();
+
+		public static readonly IAudioManager AudioManager;
 		public static readonly IStrings Strings;
 
 		private ColorLinesNG game;
 
 		static App() {
+			App.AudioManager = DependencyService.Get<IAudioManager>();
 			var ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
 			if (ci.Name.ToLower().Contains("ru"))
 				App.Strings = new StringsRu();
