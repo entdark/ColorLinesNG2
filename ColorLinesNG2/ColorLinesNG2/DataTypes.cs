@@ -92,6 +92,12 @@ namespace CLDataTypes {
 		public static bool operator !=(CLPoint left, CLPoint right) {
 			return left.X != right.X || left.Y != right.Y;
 		}
+		public override bool Equals(object obj) {
+			return obj is CLPoint && this == (CLPoint)obj;
+		}
+		public override int GetHashCode() {
+			return base.GetHashCode();
+		}
 	}
 
 	public class CLLabel : IDisposable {
