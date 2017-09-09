@@ -105,6 +105,10 @@ namespace ColorLinesNG2 {
 			}
 			this.textureIds = new int[size];
 			this.images = new SKImage[size];
+			bool loadTexture = /*!embeddedTextures[j][k].InitIgnore || */
+				Device.RuntimePlatform == Device.Android ||
+				Device.RuntimePlatform == Device.iOS ||
+				Device.Idiom == TargetIdiom.Desktop;
 			int []specialBgTextureIds = new int[2];
 			for (i = 0; i < size; i++) {
 				int j = 0, sum = 0;
@@ -112,8 +116,8 @@ namespace ColorLinesNG2 {
 					int k = 0;
 					foreach (var texture in texturesArray) {
 						if (i == sum) {
-							if (/*!embeddedTextures[j][k].InitIgnore || */Device.Idiom == TargetIdiom.Desktop) {
-								this.images[i] = LoadTexture(embeddedTextures[j][k], textureScale);
+							if (loadTexture) {
+								ColorLinesNG.images[i] = LoadTexture(embeddedTextures[j][k], textureScale);
 							}
 							textureIdsDouble[j][k] = i;
 							if (embeddedTextures[j][k].Name.Equals("CLNG_Stars.png")) {
