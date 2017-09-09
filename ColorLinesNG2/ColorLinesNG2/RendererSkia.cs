@@ -197,6 +197,9 @@ namespace CLRenderer {
 							loadingTextures.Remove(this.TextureId);
 						});
 					}
+					if (this.Angle != 0.0f) {
+						canvas.Restore();
+					}
 					return;
 				}
 				if (this.Grayscale) {
