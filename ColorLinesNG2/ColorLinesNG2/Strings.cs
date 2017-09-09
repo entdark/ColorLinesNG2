@@ -1,284 +1,98 @@
-﻿using Xamarin.Forms;
-
-namespace ColorLinesNG2 {
-	public static class Strings {
-		private static IStrings strings = null;
-		public static void Init() {
-			var ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
-			if (ci.Name.Contains("ru"))
-				strings = new StringsRu();
-			else
-				strings = new StringsDefault();
-		}
-
-		public static string Achieve10Desc {
-			get {
-				return strings.Achieve10Desc;
-			}
-		}
-
-		public static string Achieve13Desc {
-			get {
-				return strings.Achieve13Desc;
-			}
-		}
-
-		public static string Achieve500Desc {
-			get {
-				return strings.Achieve500Desc;
-			}
-		}
-
-		public static string Achieve1000Desc {
-			get {
-				return strings.Achieve1000Desc;
-			}
-		}
-
-		public static string AchieveBlowReward {
-			get {
-				return strings.AchieveBlowReward;
-			}
-		}
-
-		public static string AchieveScoreReward {
-			get {
-				return strings.AchieveScoreReward;
-			}
-		}
-
-		public static string Achievement {
-			get {
-				return strings.Achievement;
-			}
-		}
-
-		public static string Achievements {
-			get {
-				return strings.Achievements;
-			}
-		}
-
-		public static string Animations {
-			get {
-				return strings.Animations;
-			}
-		}
-
-		public static string ApplicationName {
-			get {
-				return strings.ApplicationName;
-			}
-		}
-		
-		public static string Back {
-			get {
-				return strings.Back;
-			}
-		}
-
-		public static string BackgroundSelected {
-			get {
-				return strings.BackgroundSelected;
-			}
-		}
-
-		public static string BallsSkinSelected {
-			get {
-				return strings.BallsSkinSelected;
-			}
-		}
-
-		public static string CompleteAchievement {
-			get {
-				return strings.CompleteAchievement;
-			}
-		}
-
-		public static string CompleteTutorial {
-			get {
-				return strings.CompleteTutorial;
-			}
-		}
-
-		public static string ConfirmMove {
-			get {
-				return strings.ConfirmMove;
-			}
-		}
-
-		public static string Exit {
-			get {
-				return strings.Exit;
-			}
-		}
-
-		public static string ExitQ {
-			get {
-				return strings.ExitQ;
-			}
-		}
-
-		public static string FirstReward {
-			get {
-				return strings.FirstReward;
-			}
-		}
-
-		public static string Gallery {
-			get {
-				return strings.Gallery;
-			}
-		}
-
-		public static string GameOver {
-			get {
-				return strings.GameOver;
-			}
-		}
-
-		public static string Hi {
-			get {
-				return strings.Hi;
-			}
-		}
-
-		public static string Menu {
-			get {
-				return strings.Menu;
-			}
-		}
-
-		public static string Music {
-			get {
-				return strings.Music;
-			}
-		}
-
-		public static string Name {
-			get {
-				return strings.Name;
-			}
-		}
-
-		public static string NewRecord {
-			get {
-				return strings.NewRecord;
-			}
-		}
-
-		public static string Next {
-			get {
-				return strings.Next;
-			}
-		}
-
-		public static string No {
-			get {
-				return strings.No;
-			}
-		}
-
-		public static string Restart {
-			get {
-				return strings.Restart;
-			}
-		}
-
-		public static string RestartQ {
-			get {
-				return strings.RestartQ;
-			}
-		}
-
-		public static string Results {
-			get {
-				return strings.Results;
-			}
-		}
-
-		public static string Reward {
-			get {
-				return strings.Reward;
-			}
-		}
-
-		public static string RewardLocked {
-			get {
-				return strings.RewardLocked;
-			}
-		}
-
-		public static string Route {
-			get {
-				return strings.Route;
-			}
-		}
-
-		public static string SelectBackground {
-			get {
-				return strings.SelectBackground;
-			}
-		}
-
-		public static string SelectBallsSkin {
-			get {
-				return strings.SelectBallsSkin;
-			}
-		}
-
-		public static string Settings {
-			get {
-				return strings.Settings;
-			}
-		}
-
-		public static string Skip {
-			get {
-				return strings.Skip;
-			}
-		}
-
-		public static string Sounds {
-			get {
-				return strings.Sounds;
-			}
-		}
-
-		public static string TapMe {
-			get {
-				return strings.TapMe;
-			}
-		}
-
-		public static string TutBlocked {
-			get {
-				return strings.TutBlocked;
-			}
-		}
-
-		public static string TutMakeLine {
-			get {
-				return strings.TutMakeLine;
-			}
-		}
-
-		public static string TutTapBall {
-			get {
-				return strings.TutTapBall;
-			}
-		}
-
-		public static string TutTapBlock {
-			get {
-				return strings.TutTapBlock;
-			}
-		}
-
-		public static string Yes {
-			get {
-				return strings.Yes;
-			}
-		}
+﻿namespace ColorLinesNG2 {
+	public class StringsDefault : IStrings {
+		public string Achieve10Desc => "POP 10 BALLS";
+		public string Achieve13Desc => "POP 13 BALLS";
+		public string Achieve500Desc => "SCORE 500 POINTS";
+		public string Achieve1000Desc => "SCORE 1000 POINTS";
+		public string AchieveBlowReward => "NEW BALL COLORS";
+		public string AchieveScoreReward => "NEW BACKGROUND";
+		public string Achievement => "ACHIEVEMENT: ";
+		public string Achievements => "ACHIEVEMENTS";
+		public string Animations => "ANIMATIONS";
+		public string ApplicationName => "Color Lines NG";
+		public string Back => "BACK";
+		public string BackgroundSelected => "CURRENT BACKGROUND";
+		public string BallsSkinSelected => "CURRENT COLORS";
+		public string CompleteAchievement => "UNLOCK ACHIEVEMENT: ";
+		public string CompleteTutorial => "COMPLETE A SIMPLE TUTORIAL";
+		public string ConfirmMove => "CONFIRM MOVE";
+		public string Exit => "EXIT";
+		public string ExitQ => "EXIT?";
+		public string FirstReward => "REWARD UNLOCKED IN MENU -> GALLERY";
+		public string Gallery => "GALLERY";
+		public string GameOver => "GAME OVER";
+		public string Hi => "HI";
+		public string Menu => "MENU";
+		public string Music => "MUSIC";
+		public string Name => "NAME:";
+		public string NewRecord => "NEW RECORD!";
+		public string Next => "NEXT COLORS";
+		public string No => "NO";
+		public string Restart => "RESTART";
+		public string RestartQ => "RESTART?";
+		public string RestoredGame => "RESTORED THE LAST GAME SESSION";
+		public string Results => "RESULTS";
+		public string Reward => "REWARD: ";
+		public string RewardLocked => "REWARD IS LOCKED";
+		public string Route => "ROUTE";
+		public string SelectBackground => "SELECT THIS BACKGROUND";
+		public string SelectBallsSkin => "SELECT THESE COLORS";
+		public string Settings => "SETTINGS";
+		public string Skip => "SKIP";
+		public string Sounds => "SOUNDS";
+		public string TapMe => "TAP ME";
+		public string TutBlocked => "CLEAR THE BALL'S PATH";
+		public string TutMakeLine => "MAKE A LINE OF 5 OR MORE BALLS";
+		public string TutTapBall => "TAP A GREEN BALL TO SELECT";
+		public string TutTapBlock => "TAP AN EMPTY BLOCK TO MOVE";
+		public string Yes => "YES";
+	}
+	public class StringsRu : IStrings {
+		public string Achieve10Desc => "ЛОПНУТЬ 10 ШАРИКОВ";
+		public string Achieve13Desc => "ЛОПНУТЬ 13 ШАРИКОВ";
+		public string Achieve500Desc => "НАБРАТЬ 500 ОЧКОВ";
+		public string Achieve1000Desc => "НАБРАТЬ 1000 ОЧКОВ";
+		public string AchieveBlowReward => "НОВЫЕ ЦВЕТА ШАРИКОВ";
+		public string AchieveScoreReward => "НОВЫЙ ФОН";
+		public string Achievement => "ДОСТИЖЕНИЕ: ";
+		public string Achievements => "ДОСТИЖЕНИЯ";
+		public string Animations => "АНИМАЦИИ";
+		public string ApplicationName => "Цветные Линии NG";
+		public string Back => "НАЗАД";
+		public string BackgroundSelected => "ТЕКУЩИЙ ФОН";
+		public string BallsSkinSelected => "ТЕКУЩИЕ ЦВЕТА ШАРИКОВ";
+		public string CompleteAchievement => "ПОЛУЧИ ДОСТИЖЕНИЕ: ";
+		public string CompleteTutorial => "ПРОЙДИ ПРОСТОЕ ОБУЧЕНИЕ";
+		public string ConfirmMove => "ПОДТВЕРДИТЬ ХОД";
+		public string Exit => "ВЫХОД";
+		public string ExitQ => "ВЫХОД?";
+		public string FirstReward => "ПОЛУЧЕНА НАГРАДА В МЕНЮ -> ГАЛЕРЕЯ";
+		public string Gallery => "ГАЛЕРЕЯ";
+		public string GameOver => "ИГРА ОКОНЧЕНА";
+		public string Hi => "ПРИВЕТ";
+		public string Menu => "МЕНЮ";
+		public string Music => "МУЗЫКА";
+		public string Name => "ИМЯ:";
+		public string NewRecord => "НОВЫЙ РЕКОРД!";
+		public string Next => "ПОДСКАЗКА";
+		public string No => "НЕТ";
+		public string Restart => "НАЧАЛО";
+		public string RestartQ => "СНАЧАЛА?";
+		public string RestoredGame => "ВОССТАНОВЛЕНА ПОСЛЕДНЯЯ ИГРА";
+		public string Results => "РЕЗУЛЬТАТЫ";
+		public string Reward => "НАГРАДА: ";
+		public string RewardLocked => "НАГРАДА ЕЩЁ НЕ ПОЛУЧЕНА";
+		public string Route => "ПУТЬ";
+		public string SelectBackground => "ВЫБРАТЬ ЭТОТ ФОН";
+		public string SelectBallsSkin => "ВЫБРАТЬ ЭТИ ЦВЕТА ШАРИКОВ";
+		public string Settings => "НАСТРОЙКИ";
+		public string Skip => "ПРОПУСТИТЬ";
+		public string Sounds => "ЗВУКИ";
+		public string TapMe => "НАЖМИ НА МЕНЯ";
+		public string TutBlocked => "ОСВОБОДИ ПУТЬ ШАРИКУ";
+		public string TutMakeLine => "ВЫСТАВИ 5 ИЛИ БОЛЕЕ ШАРОВ В РЯД";
+		public string TutTapBall => "НАЖМИ НА ЗЕЛЁНЫЙ ШАРИК";
+		public string TutTapBlock => "НАЖМИ НА ПУСТОЕ ПОЛЕ";
+		public string Yes => "ДА";
 	}
 }

@@ -8,13 +8,22 @@ namespace ColorLinesNG2 {
 		public const double MinDesktopHeight = 768.0;
 		public const double MinDesktopRatio = 0.546875;
 		public static readonly IAudioManager AudioManager = DependencyService.Get<IAudioManager>();
+		public static readonly IStrings Strings;
+
 		private ColorLinesNG game;
+
+		static App() {
+			var ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
+			if (ci.Name.ToLower().Contains("ru"))
+				App.Strings = new StringsRu();
+			else
+				App.Strings = new StringsDefault();
+		}
 		public App() {
 			var assembly = typeof(App).GetTypeInfo().Assembly;
 			foreach (var res in assembly.GetManifestResourceNames()) {
 				System.Diagnostics.Debug.WriteLine("found resource: " + res);
 			}
-			Strings.Init();
 //			string localizedString = Strings.Yes;
 			var mainPage = new MainPage();
 			this.game = mainPage.Game;

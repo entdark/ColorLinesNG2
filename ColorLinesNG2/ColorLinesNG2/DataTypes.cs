@@ -231,7 +231,7 @@ namespace CLDataTypes {
 				this.Checked?.Invoke(this, new CLCheckBoxEventArgs(value));
 				this.check = value;
 				Device.BeginInvokeOnMainThread(() => {
-					this.yn.Text = value ? Strings.Yes : Strings.No;
+					this.yn.Text = value ? App.Strings.Yes : App.Strings.No;
 					this.yn.TextColor = value ? this.textColour : CLField.GrayColor;
 				});
 			}
@@ -755,23 +755,23 @@ namespace CLDataTypes {
 			default:
 			case 10:
 				id = CLAchievements.CLBlow10;
-				description = Strings.Achieve10Desc;
-				unlocks = Strings.AchieveBlowReward;
+				description = App.Strings.Achieve10Desc;
+				unlocks = App.Strings.AchieveBlowReward;
 				break;
 			case 13:
 				id = CLAchievements.CLBlow13;
-				description = Strings.Achieve13Desc;
-				unlocks = Strings.AchieveBlowReward;
+				description = App.Strings.Achieve13Desc;
+				unlocks = App.Strings.AchieveBlowReward;
 				break;
 			case 500:
 				id = CLAchievements.CLScore500;
-				description = Strings.Achieve500Desc;
-				unlocks = Strings.AchieveScoreReward;
+				description = App.Strings.Achieve500Desc;
+				unlocks = App.Strings.AchieveScoreReward;
 				break;
 			case 1000:
 				id = CLAchievements.CLScore1000;
-				description = Strings.Achieve1000Desc;
-				unlocks = Strings.AchieveScoreReward;
+				description = App.Strings.Achieve1000Desc;
+				unlocks = App.Strings.AchieveScoreReward;
 				break;
 			}
 			return new CLAchievement() {

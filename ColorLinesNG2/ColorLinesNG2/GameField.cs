@@ -277,7 +277,7 @@ namespace ColorLinesNG2 {
 		}
 		private void InitTutorials() {
 			this.selectTutorial = new CLTutorial(
-				Strings.TutTapBall,
+				App.Strings.TutTapBall,
 				() => {
 					this.ForAllCells((c,i,j) => {
 						if ((i == 0 && j == 0)
@@ -307,7 +307,7 @@ namespace ColorLinesNG2 {
 				}
 			);
 			this.moveTutorial = new CLTutorial(
-				Strings.TutTapBlock,
+				App.Strings.TutTapBlock,
 				() => {
 					this.ForAllCells((c,i,j) => {
 						if (i == 8 && j == 8) {
@@ -330,7 +330,7 @@ namespace ColorLinesNG2 {
 				}
 			);
 			this.blowTutorial = new CLTutorial(
-				Strings.TutMakeLine,
+				App.Strings.TutMakeLine,
 				() => {
 					this.ForAllCells((c,i,j) => {
 						if ((i == 8 && j >= 4)
@@ -366,7 +366,7 @@ namespace ColorLinesNG2 {
 				}
 			);
 			this.blockedTutorial = new CLTutorial(
-				Strings.TutBlocked,
+				App.Strings.TutBlocked,
 				() => {
 					this.ForAllCells((c, i, j) => {
 						if ((i == 8 && j >= 4)
@@ -433,9 +433,9 @@ namespace ColorLinesNG2 {
 			bool ignoreTapView = false;
 			if (!this.tapViewAdded) {
 				this.tapViewAdded = true;
-				float xoffset = step * 0.32f * Strings.Name.Length;
 				CLReDraw.View(this.cellsTapView, -1.0f, 1.0f, step*9, step*9);
 				CLReDraw.View(this.entry, -1.0f+step*2+xoffset, 1.0f-step*4, step*5, step);
+				float xoffset = step * 0.32f * App.Strings.Name.Length;
 				Task.Run(async () => {
 					await Task.Delay(1000);
 					Device.BeginInvokeOnMainThread(() => {
@@ -616,10 +616,10 @@ namespace ColorLinesNG2 {
 				hackyViews = new View [7]{ null, null, null, null, null, null, null };
 			var colour = !this.teaching ? CLField.GreenColor : CLField.GreenColorTransparent;
 			this.bestScoreLabel = new CLLabel(this.scoresTable[0,1], left, top, width, height, colour, TextAlignment.End, hackyView:hackyViews[1]);
-			this.userScoreLabel = new CLLabel(this.score.ToString(), left+step*6, top, width, height, colour, TextAlignment.End, hackyView: hackyViews[2]);
-			this.menuLabel = new CLLabel(Strings.Menu, left, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[3]);
-			this.startLabel = new CLLabel(Strings.Restart, left+step*3, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[4]);
-			this.resultsLabel = new CLLabel(Strings.Results, left+step*6, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[5]);
+			this.userScoreLabel = new CLLabel(this.score.ToString(), left+step*6.0f, top, width, height, colour, TextAlignment.End, hackyView: hackyViews[2]);
+			this.menuLabel = new CLLabel(App.Strings.Menu, left, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[3]);
+			this.startLabel = new CLLabel(App.Strings.Restart, left+step*3.0f, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[4]);
+			this.resultsLabel = new CLLabel(App.Strings.Results, left+step*6.0f, bottom+step, width, height, colour, TextAlignment.Center, hackyView: hackyViews[5]);
 
 			var bounds = new float[] { left, right, bottom, top };
 			this.startLabel.Action = delegate() {
@@ -632,7 +632,7 @@ namespace ColorLinesNG2 {
 				if (this.popUpLabel != null) {
 					this.popUpLabel.Dispose();
 				}
-				this.popUpLabel = new CLLabel(Strings.RestartQ, -1.0f+step*2, 1.0f-step*4, step*5, height, CLField.RedColor, TextAlignment.Center);
+				this.popUpLabel = new CLLabel(App.Strings.RestartQ, -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, height, CLField.RedColor, TextAlignment.Center);
 				this.popUpLabel.ExtraDraw = delegate() {
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
 					this.popUpLabel.Draw(textureId, bounds);
@@ -687,8 +687,8 @@ namespace ColorLinesNG2 {
 				this.activeField = false;
 				this.popUpLabel?.Dispose();
 				float offset = step * 0.5f;
-				this.menu = new CLMenu(Strings.Menu, -1.0f+step, 1.0f-step, step*7.0f, step*7.0f, this.mainMenu);
-				this.menuLabel.Text = Strings.Back;
+				this.menu = new CLMenu(App.Strings.Menu, -1.0f+step, 1.0f-step, step*7.0f, step*7.0f, this.mainMenu);
+				this.menuLabel.Text = App.Strings.Back;
 				if (this.settings.Animations) {
 					this.activeField = false;
 					this.popUpAnimating = true;
@@ -709,7 +709,7 @@ namespace ColorLinesNG2 {
 					this.activeLabels = true;
 					if (this.popUpAnimating)
 						return;
-					this.menuLabel.Text = Strings.Menu;
+					this.menuLabel.Text = App.Strings.Menu;
 					if (this.settings.Animations) {
 						this.activeField = false;
 						this.popUpAnimating = true;
@@ -774,15 +774,15 @@ namespace ColorLinesNG2 {
 					this.popUpLabel = null;
 				};
 			};
-			this.tutGreetingsLabel = new CLLabel(Strings.TapMe, left, 1.0f-step*4, step*9, step, CLField.GreenColor, TextAlignment.Center);
+			this.tutGreetingsLabel = new CLLabel(App.Strings.TapMe, left, 1.0f-step*4.0f, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
 			this.tutGreetingsLabel.ExtraDraw = delegate() {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 				this.tutGreetingsLabel.Draw(textureId/*, bounds*/);
 			};
 			this.tutGreetingsLabel.Action/* = this.tutGreetingsLabel.OutAction*/ = delegate() {
-				this.tutGreetingsLabel.Text = Strings.Hi;
+				this.tutGreetingsLabel.Text = App.Strings.Hi;
 				this.tutGreetingsLabel.Action/* = this.tutGreetingsLabel.OutAction*/ = delegate() {
-					this.tutGreetingsLabel.Text = Strings.CompleteTutorial;
+					this.tutGreetingsLabel.Text = App.Strings.CompleteTutorial;
 					this.tutGreetingsLabel.Action/* = this.tutGreetingsLabel.OutAction*/ = delegate() {
 						this.tutGreetingsLabel.Action/* = this.tutGreetingsLabel.OutAction*/ = null;
 						this.greetings = false;
@@ -805,7 +805,7 @@ namespace ColorLinesNG2 {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 				this.tutLineLabel.Draw(textureId);
 			};
-			this.tutSkipLabel = new CLLabel(Strings.Skip, left+step*3, top, step*3, step, CLField.RedColor, TextAlignment.Center);
+			this.tutSkipLabel = new CLLabel(App.Strings.Skip, left+step*3.0f, top, step*3.0f, step, CLField.RedColor, TextAlignment.Center);
 			this.tutSkipLabel.Action = delegate() {
 				this.tutSkipLabel.Action = null;
 				this.greetings = false;
@@ -857,32 +857,32 @@ namespace ColorLinesNG2 {
 					return;
 				mainMenuInited = true;
 				settingsMenuLabel = new CLFormsLabel() {
-					Text = Strings.Settings,
+					Text = App.Strings.Settings,
 					TextScale = 1.2f
 				};
 				var tap = new TapGestureRecognizer();
 				tap.Tapped += (sender, ev) => {
-					this.menu.Push(Strings.Settings, this.settingsMenu);
+					this.menu.Push(App.Strings.Settings, this.settingsMenu);
 					CLField.PlaySound("MenuNav.mp3");
 				};
 				settingsMenuLabel.GestureRecognizers.Add(tap);
 				achievementsMenuLabel = new CLFormsLabel() {
-					Text = Strings.Achievements,
+					Text = App.Strings.Achievements,
 					TextScale = 1.2f
 				};
 				tap = new TapGestureRecognizer();
 				tap.Tapped += (sender, ev) => {
-					this.menu.Push(Strings.Achievements, this.achievementsMenu);
+					this.menu.Push(App.Strings.Achievements, this.achievementsMenu);
 					CLField.PlaySound("MenuNav.mp3");
 				};
 				achievementsMenuLabel.GestureRecognizers.Add(tap);
 				galleryMenuLabel = new CLFormsLabel() {
-					Text = Strings.Gallery,
+					Text = App.Strings.Gallery,
 					TextScale = 1.2f
 				};
 				tap = new TapGestureRecognizer();
 				tap.Tapped += (sender, ev) => {
-					this.menu.Push(Strings.Gallery, this.galleryMenu);
+					this.menu.Push(App.Strings.Gallery, this.galleryMenu);
 					CLField.PlaySound("MenuNav.mp3");
 				};
 				galleryMenuLabel.GestureRecognizers.Add(tap);
@@ -922,14 +922,14 @@ namespace ColorLinesNG2 {
 					float x = xywh[0], y = xywh[1], width = xywh[2], height = xywh[3];
 					float offset = step * 0.5f;
 					float spacing = step * 5.0f / 6.0f;
-					this.soundsCheckBox = new CLCheckBox(this.settings.Sounds, Strings.Sounds, x+offset, y-spacing*0.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
-					this.musicCheckBox = new CLCheckBox(this.settings.Music, Strings.Music, x+offset, y-spacing*1.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
-					this.nextColoursCheckBox = new CLCheckBox(this.settings.NextColours, Strings.Next, x+offset, y-spacing*2.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
-					this.animationsCheckBox = new CLCheckBox(this.settings.Animations, Strings.Animations, x+offset, y-spacing*4.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
-					this.routeCheckBox = new CLCheckBox(this.settings.Route, Strings.Route, x+offset, y-spacing*5.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f) {
+					this.soundsCheckBox = new CLCheckBox(this.settings.Sounds, App.Strings.Sounds, x+offset, y-spacing*0.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
+					this.musicCheckBox = new CLCheckBox(this.settings.Music, App.Strings.Music, x+offset, y-spacing*1.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
+					this.nextColoursCheckBox = new CLCheckBox(this.settings.NextColours, App.Strings.Next, x+offset, y-spacing*2.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
+					this.animationsCheckBox = new CLCheckBox(this.settings.Animations, App.Strings.Animations, x+offset, y-spacing*4.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
+					this.routeCheckBox = new CLCheckBox(this.settings.Route, App.Strings.Route, x+offset, y-spacing*5.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f) {
 						IsEnabled = this.settings.Animations
 					};
-					this.confirmMoveCheckBox = new CLCheckBox(this.settings.ConfirmMove, Strings.ConfirmMove, x+offset, y-spacing*3.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
+					this.confirmMoveCheckBox = new CLCheckBox(this.settings.ConfirmMove, App.Strings.ConfirmMove, x+offset, y-spacing*3.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
 					this.animationsCheckBox.Checked += (sender2, ev2) => {
 						this.routeCheckBox.IsEnabled = ev2.Checked;
 					};
@@ -1120,7 +1120,7 @@ namespace ColorLinesNG2 {
 				}));
 			}
 			CLAchievement achievement = CLAchievement.GetAchievement(this.achievements, id);
-			this.popUpLabel = new CLLabel(Strings.Achievement + achievement.Description, -1.0f, 1.0f-step*4.0f, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
+			this.popUpLabel = new CLLabel(App.Strings.Achievement + achievement.Description, -1.0f, 1.0f-step*4.0f, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
 			this.popUpLabel.ExtraDraw = delegate () {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 				this.popUpLabel.Draw(textureId, new float[] { left, right, bottom, top });
@@ -1128,7 +1128,7 @@ namespace ColorLinesNG2 {
 			this.popUpLabel.Action = this.popUpLabel.OutAction = delegate() {
 				if (this.popUpAnimating)
 					return;
-				this.popUpLabel.Text = Strings.Reward + achievement.Unlocks;
+				this.popUpLabel.Text = App.Strings.Reward + achievement.Unlocks;
 				this.popUpLabel.Action = this.popUpLabel.OutAction = delegate() {
 					if (this.popUpAnimating)
 						return;
@@ -1190,14 +1190,14 @@ namespace ColorLinesNG2 {
 			bool selectSkin = false, showSecondLocked = false;
 			string text = "";
 			if (ballsSkin == this.settings.BallsSkin) {
-				text = Strings.BallsSkinSelected;
+				text = App.Strings.BallsSkinSelected;
 			} else {
 				if (defaultSkin || unlocked) {
 					selectSkin = true;
-					text = Strings.SelectBallsSkin;
+					text = App.Strings.SelectBallsSkin;
 				} else if (!unlocked) {
 					showSecondLocked = true;
-					text = Strings.RewardLocked;
+					text = App.Strings.RewardLocked;
 				}
 			}
 			this.popUpLabel = new CLLabel(text, -1.0f, 1.0f-step*4.0f, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
@@ -1241,12 +1241,12 @@ namespace ColorLinesNG2 {
 					return;
 				CLField.PlaySound("MenuNav.mp3");
 				if (selectSkin) {
-					this.popUpLabel.Text = Strings.BallsSkinSelected;
+					this.popUpLabel.Text = App.Strings.BallsSkinSelected;
 					this.settings.BallsSkin = ballsSkin;
 					selectSkin = false;
 					return;
 				} else if (showSecondLocked) {
-					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
+					this.popUpLabel.Text = App.Strings.CompleteAchievement + achievement.Description;
 					showSecondLocked = false;
 					return;
 				}
@@ -1258,7 +1258,7 @@ namespace ColorLinesNG2 {
 				if (this.popUpLabel == null)
 					return;
 				if (showSecondLocked) {
-					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
+					this.popUpLabel.Text = App.Strings.CompleteAchievement + achievement.Description;
 					showSecondLocked = false;
 					return;
 				}
@@ -1342,14 +1342,14 @@ namespace ColorLinesNG2 {
 			bool selectBg = false, showSecondLocked = false;
 			string text = "";
 			if (background == this.settings.Background) {
-				text = Strings.BackgroundSelected;
+				text = App.Strings.BackgroundSelected;
 			} else {
 				if (defaultBg || unlocked) {
 					selectBg = true;
-					text = Strings.SelectBackground;
+					text = App.Strings.SelectBackground;
 				} else if (!unlocked) {
 					showSecondLocked = true;
-					text = Strings.RewardLocked;
+					text = App.Strings.RewardLocked;
 				}
 			}
 			this.popUpLabel = new CLLabel(text, -1.0f, 1.0f-step*4.0f, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
@@ -1400,12 +1400,12 @@ namespace ColorLinesNG2 {
 					return;
 				CLField.PlaySound("MenuNav.mp3");
 				if (selectBg) {
-					this.popUpLabel.Text = Strings.BackgroundSelected;
+					this.popUpLabel.Text = App.Strings.BackgroundSelected;
 					this.settings.Background = background;
 					selectBg = false;
 					return;
 				} else if (showSecondLocked) {
-					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
+					this.popUpLabel.Text = App.Strings.CompleteAchievement + achievement.Description;
 					showSecondLocked = false;
 					return;
 				}
@@ -1417,7 +1417,7 @@ namespace ColorLinesNG2 {
 				if (this.popUpLabel == null)
 					return;
 				if (showSecondLocked) {
-					this.popUpLabel.Text = Strings.CompleteAchievement + achievement.Description;
+					this.popUpLabel.Text = App.Strings.CompleteAchievement + achievement.Description;
 					showSecondLocked = false;
 					return;
 				}
@@ -1957,7 +1957,7 @@ namespace ColorLinesNG2 {
 				this.popUpLabel.Dispose();
 			}
 			var bounds = new float[] { this.left, this.right, this.bottom, this.top };
-			this.popUpLabel = new CLLabel(Strings.NewRecord, -1.0f+step*2, 1.0f-step*4, step*5, step, CLField.GreenColor, TextAlignment.Center);
+			this.popUpLabel = new CLLabel(App.Strings.NewRecord, -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, step, CLField.GreenColor, TextAlignment.Center);
 			this.popUpLabel.ExtraDraw = delegate() {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
 				this.popUpLabel.Draw(textureId, bounds);
@@ -1973,7 +1973,7 @@ namespace ColorLinesNG2 {
 					this.popUpLabel = null;
 				}
 				if (this.popUpLabel == null)
-					this.popUpLabel = new CLLabel(Strings.Name, -1.0f+step*2, 1.0f-step*4, step*5, step, CLField.GreenColor, TextAlignment.Start);
+					this.popUpLabel = new CLLabel(App.Strings.Name, -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, step, CLField.GreenColor, TextAlignment.Start);
 				bool entryRemoved = false;
 				Action action = delegate() {
 					this.activeLabels = false;
@@ -2056,7 +2056,7 @@ namespace ColorLinesNG2 {
 					return;
 				}
 				firstEntry = false;
-				float xoffset = step * 0.32f * Strings.Name.Length;
+				float xoffset = step * 0.32f * App.Strings.Name.Length;
 /*				this.entry = new CLFormsEntry() {
 					TextColor = CLField.GreenColor,
 					Keyboard = Keyboard.Text,
@@ -2082,7 +2082,7 @@ namespace ColorLinesNG2 {
 				this.popUpLabel.Dispose();
 			}
 			var bounds = new float[] { this.left, this.right, this.bottom, this.top };
-			this.popUpLabel = new CLLabel(Strings.GameOver, -1.0f+step*2, 1.0f-step*4, step*5, step, CLField.RedColor, TextAlignment.Center);
+			this.popUpLabel = new CLLabel(App.Strings.GameOver, -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, step, CLField.RedColor, TextAlignment.Center);
 			this.popUpLabel.ExtraDraw = delegate() {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
 				this.popUpLabel.Draw(textureId, bounds);
@@ -2526,7 +2526,7 @@ namespace ColorLinesNG2 {
 				if (this.popUpLabel != null) {
 					this.popUpLabel.Dispose();
 				}
-				this.popUpLabel = new CLLabel(Strings.Achievement + achievement.Description, -1.0f+step*1.0f, 1.0f-step*4.0f, step*8.0f, step, CLField.GreenColor, TextAlignment.Center);
+				this.popUpLabel = new CLLabel(App.Strings.Achievement + achievement.Description, -1.0f+step*1.0f, 1.0f-step*4.0f, step*8.0f, step, CLField.GreenColor, TextAlignment.Center);
 				this.popUpLabel.ExtraDraw = delegate() {
 					int textureId = this.GetTextureId(CLTextureTypes.CLAchievements, achievement.Id);
 					CLReDraw.Rect(-1.0f, 1.0f-step*4.0f, step, step, textureId);
@@ -2540,7 +2540,7 @@ namespace ColorLinesNG2 {
 					this.popUpLabel = null;
 					Action showFirstAchievement = delegate() {
 						if (this.firstAchievement) {
-							this.ShowMessage(Strings.FirstReward);
+							this.ShowMessage(App.Strings.FirstReward);
 //							this.firstAchievement = false;
 						}
 					};

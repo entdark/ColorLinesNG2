@@ -168,15 +168,15 @@ namespace ColorLinesNG2 {
 				HorizontalTextAlignment = TextAlignment.End
 			};
 			var menuLabel = new CLFormsLabel() {
-				Text = Strings.Menu,
+				Text = App.Strings.Menu,
 				TextColor = colour
 			};
 			var startLabel = new CLFormsLabel() {
-				Text = Strings.Restart,
+				Text = App.Strings.Restart,
 				TextColor = colour
 			};
 			var resultsLabel = new CLFormsLabel() {
-				Text = Strings.Results,
+				Text = App.Strings.Results,
 				TextColor = colour
 			};
 			var nameEntry = new CLFormsEntry() {
@@ -297,7 +297,7 @@ namespace ColorLinesNG2 {
 			mainLayout.Children.Add(
 				hackyViews[6],
 				Constraint.RelativeToParent(parent => {
-					return parent.Width * 0.1111 * 2.0 + parent.Width * 0.1111 * 0.32f * Strings.Name.Length;
+					return parent.Width * 0.1111 * 2.0 + parent.Width * 0.1111 * 0.32f * App.Strings.Name.Length;
 				}),
 				Constraint.RelativeToParent(parent => {
 					return (parent.Height - parent.Width) * 0.5 + parent.Width * 0.1111 * 4.0;

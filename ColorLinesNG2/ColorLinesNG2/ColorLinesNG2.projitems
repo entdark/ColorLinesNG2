@@ -29,7 +29,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)RendererSkia.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StringsShared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tutorial.cs" />
   </ItemGroup>
   <ItemGroup>
