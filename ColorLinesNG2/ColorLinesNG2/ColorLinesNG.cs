@@ -71,6 +71,8 @@ namespace ColorLinesNG2 {
 		}
 
 		public bool OnBackButtonPressed() {
+			if (this.field == null)
+				return true;
 			return this.field.OnBackButtonPressed();
 		}
 
