@@ -1879,7 +1879,7 @@ namespace ColorLinesNG2 {
 					long startMovingSound = duration-CLField.StartMovingSound;
 					bool playedSound = false;
 					CLAnim.AddToQueue(new CLAnim(duration, (start, end, checkTime) => {
-						if (this.settings.Route && !playedSound && this.time-start > startMovingSound) {
+						if (this.settings.Route && !playedSound && (this.time-start) > startMovingSound) {
 							playedSound = true;
 							CLField.PlaySound("Move.mp3");
 						}
