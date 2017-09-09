@@ -130,6 +130,15 @@ namespace ColorLinesNG2 {
 			}
 		}
 
+		public const float c1d2 = 0.5f;			//1/2
+		public const float c1d3 = 0.333333f;	//1/3
+		public const float c1d4 = 0.25f;		//1/4
+		public const float c1d5 = 0.2f;			//1/5
+		public const float c1d6 = 0.166666f;	//1/6
+		public const float c1d7 = 0.142857f;	//1/7
+		public const float c1d8 = 0.125f;		//1/8
+		public const float c1d9 = 0.111111f;	//1/9
+
 		public static readonly Color GreenColor = Color.FromRgba(0, 170, 0, 255);
 		public static readonly Color GreenColorTransparent = Color.FromRgba(0, 170, 0, 0);
 		public static readonly Color RedColor = Color.FromRgba(255, 0, 0, 255);
@@ -420,8 +429,8 @@ namespace ColorLinesNG2 {
 				this.menuLabel.Draw(textureId);
 				this.startLabel.Draw(textureId);
 				this.resultsLabel.Draw(textureId);
-				CLReDraw.Rect(this.left, this.top, step*9, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
-				CLReDraw.Rect(this.left, this.bottom+step, step*9, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
+				CLReDraw.Rect(this.left, this.top, step*9.0f, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
+				CLReDraw.Rect(this.left, this.bottom+step, step*9.0f, step, Color.FromRgba(0.0, 0.0, 0.0, 1.0));
 			}
 			if (this.teaching && this.greetings) {
 				this.tutGreetingsLabel?.ExtraDraw();
@@ -433,9 +442,9 @@ namespace ColorLinesNG2 {
 			bool ignoreTapView = false;
 			if (!this.tapViewAdded) {
 				this.tapViewAdded = true;
-				CLReDraw.View(this.cellsTapView, -1.0f, 1.0f, step*9, step*9);
-				CLReDraw.View(this.entry, -1.0f+step*2+xoffset, 1.0f-step*4, step*5, step);
 				float xoffset = step * 0.32f * App.Strings.Name.Length;
+				CLReDraw.View(this.cellsTapView, -1.0f, 1.0f, step*9.0f, step*9.0f);
+				CLReDraw.View(this.entry, -1.0f+step*2.0f+xoffset, 1.0f-step*4.0f, step*5.0f, step);
 				Task.Run(async () => {
 					await Task.Delay(1000);
 					Device.BeginInvokeOnMainThread(() => {
@@ -474,15 +483,15 @@ namespace ColorLinesNG2 {
 			bool nc = this.settings.NextColours;
 			if (!this.teaching) {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLCell);
-				CLReDraw.Rect(this.left+step*3, this.top, step, step, textureId);
+				CLReDraw.Rect(this.left+step*3.0f, this.top, step, step, textureId);
 				if (this.nextColours[0] != CLColour.CLNone && nc)
-					CLReDraw.Rect(this.left+step*3.5f-radius, this.top-step*0.5f+radius, radius*2, radius*2, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[0]));
-				CLReDraw.Rect(this.left+step*4, this.top, step, step, textureId);
+					CLReDraw.Rect(this.left+step*3.5f-radius, this.top-step*0.5f+radius, radius*2.0f, radius*2.0f, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[0]));
+				CLReDraw.Rect(this.left+step*4.0f, this.top, step, step, textureId);
 				if (this.nextColours[1] != CLColour.CLNone && nc)
-					CLReDraw.Rect(this.left+step*4.5f-radius, this.top-step*0.5f+radius, radius*2, radius*2, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[1]));
-				CLReDraw.Rect(this.left+step*5, this.top, step, step, textureId);
+					CLReDraw.Rect(this.left+step*4.5f-radius, this.top-step*0.5f+radius, radius*2.0f, radius*2.0f, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[1]));
+				CLReDraw.Rect(this.left+step*5.0f, this.top, step, step, textureId);
 				if (this.nextColours[2] != CLColour.CLNone && nc)
-					CLReDraw.Rect(this.left+step*5.5f-radius, this.top-step*0.5f+radius, radius*2, radius*2, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[2]));
+					CLReDraw.Rect(this.left+step*5.5f-radius, this.top-step*0.5f+radius, radius*2.0f, radius*2.0f, this.GetTextureId(CLTextureTypes.CLBalls, this.nextColours[2]));
 
 				textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLSmall);
 				this.bestScoreLabel.Draw(textureId);
@@ -668,7 +677,7 @@ namespace ColorLinesNG2 {
 						this.activeField = false;
 						this.popUpAnimating = true;
 						float []startRect = this.popUpLabel.GetCoordinates();
-						float []endRect = { -1.0f+step*3, 1.0f-step*4-step*1/5, step*3, step*3/5 };
+						float []endRect = { -1.0f+step*3.0f, 1.0f-step*4.0f-step*c1d5, step*3.0f, step*3.0f*c1d5 };
 						int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
 						CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 							return this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId, appearing: false);
@@ -713,8 +722,8 @@ namespace ColorLinesNG2 {
 					if (this.settings.Animations) {
 						this.activeField = false;
 						this.popUpAnimating = true;
-						float []startRect = { -1.0f+step, 1.0f-step, step*7, step*7 };
-						float []endRect = { -1.0f+step*2, 1.0f-step*2, step*5, step*5 };
+						float []startRect = { -1.0f+step, 1.0f-step, step*7.0f, step*7.0f };
+						float []endRect = { -1.0f+step*2.0f, 1.0f-step*2.0f, step*5.0f, step*5.0f };
 						int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLarge);
 						CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 							return this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId, appearing: false);
@@ -732,7 +741,7 @@ namespace ColorLinesNG2 {
 				if (this.popUpLabel != null) {
 					this.popUpLabel.Dispose();
 				}
-				this.popUpLabel = new CLLabel(GetBestScoresList(), -1.0f+step, 1.0f-step, step*7, step*7, CLField.GreenColor, TextAlignment.Center, 1.337f);
+				this.popUpLabel = new CLLabel(GetBestScoresList(), -1.0f+step, 1.0f-step, step*7.0f, step*7.0f, CLField.GreenColor, TextAlignment.Center, 1.337f);
 				this.popUpLabel.ExtraDraw = delegate() {
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLarge);
 /*					CLReDraw.Rect(-1.0f+step, 1.0f-step, step*7, step*7, textureId);
@@ -744,7 +753,7 @@ namespace ColorLinesNG2 {
 					this.activeField = false;
 					this.popUpAnimating = true;
 					bool fromCentre = !(this.entry == null || !this.entry.IsVisible);
-					float []startRect = fromCentre ? new float[] { -1.0f+step*2, 1.0f-step*4, step*5, step } : resultsLabel.GetCoordinates();
+					float []startRect = fromCentre ? new float[] { -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, step } : resultsLabel.GetCoordinates();
 					float []endRect = this.popUpLabel.GetCoordinates();
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLarge);
 					int oldTextureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
@@ -762,7 +771,7 @@ namespace ColorLinesNG2 {
 						this.activeField = false;
 						this.popUpAnimating = true;
 						float []startRect = this.popUpLabel.GetCoordinates();
-						float []endRect = { -1.0f+step*2, 1.0f-step*2, step*5, step*5 };
+						float []endRect = { -1.0f+step*2.0f, 1.0f-step*2.0f, step*5.0f, step*5.0f };
 						int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLarge);
 						CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 							return this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId, appearing: false);
@@ -800,7 +809,7 @@ namespace ColorLinesNG2 {
 					};
 				};
 			};
-			this.tutLineLabel = new CLLabel("", left, bottom+step, step*9, step, CLField.GreenColor, TextAlignment.Center);
+			this.tutLineLabel = new CLLabel("", left, bottom+step, step*9.0f, step, CLField.GreenColor, TextAlignment.Center);
 			this.tutLineLabel.ExtraDraw = delegate() {
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 				this.tutLineLabel.Draw(textureId);
@@ -921,7 +930,7 @@ namespace ColorLinesNG2 {
 					settingsMenuInited = true;
 					float x = xywh[0], y = xywh[1], width = xywh[2], height = xywh[3];
 					float offset = step * 0.5f;
-					float spacing = step * 5.0f / 6.0f;
+					float spacing = step * 5.0f * c1d6;
 					this.soundsCheckBox = new CLCheckBox(this.settings.Sounds, App.Strings.Sounds, x+offset, y-spacing*0.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
 					this.musicCheckBox = new CLCheckBox(this.settings.Music, App.Strings.Music, x+offset, y-spacing*1.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
 					this.nextColoursCheckBox = new CLCheckBox(this.settings.NextColours, App.Strings.Next, x+offset, y-spacing*2.0f, width-offset*2.0f, spacing, CLField.GreenColor, TextAlignment.Start, 1.2f);
@@ -2095,8 +2104,8 @@ namespace ColorLinesNG2 {
 				if (this.settings.Animations) {
 					this.activeField = false;
 					this.popUpAnimating = true;
-					float []startRect = { -1.0f+step*2, 1.0f-step*4, step*5, step };
-					float []endRect = { -1.0f+step*3, 1.0f-step*4-step*1/5, step*3, step*3/5 };
+					float []startRect = { -1.0f+step*2.0f, 1.0f-step*4.0f, step*5.0f, step };
+					float []endRect = { -1.0f+step*3.0f, 1.0f-step*4.0f-step*c1d5, step*3.0f, step*3.0f*c1d5 };
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLMedium);
 					CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 						return this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId, appearing: false);
@@ -2167,7 +2176,7 @@ namespace ColorLinesNG2 {
 			if (this.settings.Animations) {
 				this.activeField = false;
 				this.popUpAnimating = true;
-				float []startRect = { -1.0f+step*1.0f, 1.0f-step*4-step*1/9, step*7, step*7/9 };
+				float []startRect = { -1.0f+step*1.0f, 1.0f-step*4.0f-step*c1d9, step*7.0f, step*7.0f*c1d9 };
 				float []endRect = { -1.0f, 1.0f-step*4.0f, step*9.0f, step };
 				int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 				CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
@@ -2183,7 +2192,7 @@ namespace ColorLinesNG2 {
 					this.activeField = false;
 					this.popUpAnimating = true;
 					float []startRect = { -1.0f, 1.0f-step*4.0f, step*9.0f, step };
-					float []endRect = { -1.0f+step*1.0f, 1.0f-step*4-step*1/9, step*7, step*7/9 };
+					float []endRect = { -1.0f+step*1.0f, 1.0f-step*4.0f-step*c1d9, step*7.0f, step*7.0f*c1d9 };
 					int textureId = this.GetTextureId(CLTextureTypes.CLLabels, CLLabelSize.CLLong);
 					CLAnim.AddToQueue(new CLAnim(CLField.AnimPopUpDuration, (start, end, checkTime) => {
 						return this.AnimPopUp(start, end, checkTime, startRect, endRect, textureId, appearing: false);
