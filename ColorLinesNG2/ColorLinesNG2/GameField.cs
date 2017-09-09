@@ -116,6 +116,16 @@ namespace ColorLinesNG2 {
 					Settings.Achievements = value;
 				}
 			}
+			private string savedGame = "";
+			public string SavedGame {
+				get {
+					return this.savedGame;
+				}
+				set {
+					this.savedGame = value;
+					Settings.SavedGame = value;
+				}
+			}
 			public CLSettings() {
 				this.ballsSkin = (CLBallSkins)Settings.BallsSkin;
 				this.background = (CLBackgrounds)Settings.Background;
@@ -127,6 +137,7 @@ namespace ColorLinesNG2 {
 				this.sounds = Settings.Sounds;
 				this.music = Settings.Music;
 				this.achievements = Settings.Achievements;
+				this.savedGame = Settings.SavedGame;
 			}
 		}
 
@@ -846,7 +857,12 @@ namespace ColorLinesNG2 {
 			this.InitMenus();
 			this.InitTutorials();
 			this.InitAudio();
-			this.AddBalls(true);
+			bool gameLoaded = false;
+			try {
+				gameLoaded = this.LoadGame();
+			} catch {}
+			if (!gameLoaded)
+				this.AddBalls(true);
 		}
 		private void InitMenus() {
 			CLFormsLabel settingsMenuLabel = null, achievementsMenuLabel = null, galleryMenuLabel = null;
@@ -1599,6 +1615,8 @@ namespace ColorLinesNG2 {
 				if (!restart && this.BlowBalls(cell) && n < 3)
 					n = 3;
 			}
+			if (restart)
+				this.settings.SavedGame = "";
 			int currentBallsCount = 0;
 			this.ForAllCells((c,i,j) => {
 				if (c.Colour != CLColour.CLNone)
@@ -1776,6 +1794,7 @@ namespace ColorLinesNG2 {
 					this.userScoreLabel.Text = this.score.ToString();
 					this.CheckAchievements(this.score, countTotal);
 				}
+				this.SaveGame();
 			}
 
 			return willBlow;
@@ -1992,6 +2011,7 @@ namespace ColorLinesNG2 {
 					&& !string.IsNullOrEmpty(this.entry.Text)) {
 						entryRemoved = true;
 						this.SaveUserScore();
+						this.settings.SavedGame = "";
 //						CLReDraw.ReleaseView(this.entry);
 						this.resultsLabel.Action();
 						this.entry.Text = "";
@@ -2808,6 +2828,95 @@ namespace ColorLinesNG2 {
 			if (this.menu == null || !this.menu.Show)
 				return false;
 			this.menu.Pop();
+			return true;
+		}
+
+		private void SaveGame() {
+			if (this.teaching)
+				return;
+			string savedGame = "";
+			bool firstAdded = false;
+			this.ForAllCells((c,i,j) => {
+				if (c.Colour == CLColour.CLNone)
+					return;
+				if (!firstAdded) {
+					firstAdded = true;
+				} else {
+					savedGame += ";";
+				}
+				savedGame += string.Format("{0}:{1}={2}", i.ToString(), j.ToString(), ((int)c.Colour).ToString());
+			});
+			for (int i = 0; i < 3; i++) {
+				savedGame += string.Format(";-1:{0}={1}", i.ToString(), ((int)this.nextColours[i]).ToString());
+			}
+			savedGame += string.Format(";-1:3={0}", this.score.ToString());
+			this.settings.SavedGame = savedGame;
+		}
+
+		private bool LoadGame() {
+			if (this.teaching)
+				return false;
+			string savedGame = this.settings.SavedGame;
+			if (string.IsNullOrEmpty(savedGame))
+				return false;
+			string []coordinatesValues = savedGame.Split(';');
+			if (coordinatesValues == null)
+				return false;
+			int totalCells = 0, scoreLoaded = 0;
+			int maxCells = this.rows*this.columns;
+			CLCell [,]loadedCells = new CLCell[this.rows+1,this.columns];
+			foreach (string coordinatesValue in coordinatesValues) {
+				if (totalCells > maxCells)
+				if (string.IsNullOrEmpty(coordinatesValue))
+					return false;
+				string []csv = coordinatesValue.Split(new char[2] { ':', '=' });
+				if (csv == null || csv.Length != 3)
+					return false;
+				int i = int.Parse(csv[0]),
+					j = int.Parse(csv[1]),
+					v = int.Parse(csv[2]);
+				if (i == -1) {
+					if (j == 3) {
+						scoreLoaded = v;
+						continue;
+					}
+					loadedCells[this.rows,j] = new CLCell(-1, j) {
+						Colour = (CLColour)v
+					};
+					continue;
+				}
+				loadedCells[i,j] = new CLCell(i, j) {
+					Colour = (CLColour)v
+				};
+				totalCells++;
+			}
+			if (scoreLoaded <= 0)
+				return false;
+			if (totalCells > maxCells)
+				return false;
+			int loadedBallsCount = 0;
+			this.ForAllCells((c,i,j) => {
+				if (loadedCells[i,j] == null)
+					return;
+				c.Colour = loadedCells[i,j].Colour;
+				if (c.Colour != CLColour.CLNone)
+					loadedBallsCount++;
+				if (this.settings.Animations) {
+					c.AnimTime = this.time;
+					c.Appearing = true;
+					CLAnim.AddToQueue(new CLAnim(CLField.AnimAppearingDuration, (start, end, checkTime) => {
+						return this.AnimAppearing(start, end, checkTime, c);
+					}, true), true);
+				}
+			});
+			this.extraScore = !this.settings.NextColours;
+			this.ballsCount = loadedBallsCount;
+			this.nextColours[0] = loadedCells[this.rows,0].Colour;
+			this.nextColours[1] = loadedCells[this.rows,1].Colour;
+			this.nextColours[2] = loadedCells[this.rows,2].Colour;
+			this.score = scoreLoaded;
+			this.userScoreLabel.Text = this.score.ToString();
+			this.ShowMessage(App.Strings.RestoredGame);
 			return true;
 		}
 	}

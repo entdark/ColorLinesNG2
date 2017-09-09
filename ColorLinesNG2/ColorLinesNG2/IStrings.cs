@@ -30,6 +30,7 @@
 		string No { get; }
 		string Restart { get; }
 		string RestartQ { get; }
+		string RestoredGame { get; }
 		string Results { get; }
 		string Reward { get; }
 		string RewardLocked { get; }

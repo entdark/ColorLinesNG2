@@ -35,6 +35,22 @@ namespace ColorLinesNG2 {
 			}
 		}
 #endregion
+#region SAVED_GAME
+		private const string savedGameKey = "saved_game_key";
+		//format: x:y=v;7:5=2;5:2=7;-1:0=4;
+		//where x:y is cell coordinates and v - ball colour or none
+		//when x is -1 then it's "next colors" cell coordinates and score
+		private static readonly string savedGameDefault = "";
+
+		public static string SavedGame {
+			get {
+				return AppSettings.GetValueOrDefault(savedGameKey, savedGameDefault);
+			}
+			set {
+				AppSettings.AddOrUpdateValue(savedGameKey, value);
+			}
+		}
+#endregion
 #region BALLS_SKIN
 		private const string ballsSkinKey = "balls_skin_key";
 		private static readonly int ballsSkinDefault = 0;
