@@ -1858,21 +1858,12 @@ namespace ColorLinesNG2 {
 			if (from == to)
 				return false;
 			bool[,] map = new bool[this.columns, this.rows];
-			CLCell cell = this.cells;
-			for (int i = 0; i < this.rows; i++, cell = cell.Bottom) {
-				for (int j = 0; j < this.columns; j++, cell = cell.Right) {
-					if (cell == null)
-						break;
-					if (cell.Colour == CLColour.CLNone)
-						map[j,i] = true;
-					else
-						map[j,i] = false;
-				}
-				cell = this.cells;
-				for (int k = 0; k < i; k++, cell = cell.Bottom);
-				if (cell == null)
-					break;
-			}
+			this.ForAllCells((c,i,j) => {
+				if (c.Colour == CLColour.CLNone)
+					map[j,i] = true;
+				else
+					map[j,i] = false;
+			});
 			SearchParameters searchParameters = new SearchParameters(new CLPoint(from.Column, from.Row), new CLPoint(to.Column, to.Row), map);
 			PathFinder pathFinder = new PathFinder(searchParameters);
 			var path = pathFinder.FindPath();
