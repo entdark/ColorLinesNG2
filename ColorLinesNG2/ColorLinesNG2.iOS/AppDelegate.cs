@@ -25,7 +25,7 @@ namespace ColorLinesNG2.iOS {
 			manager.Authenticator.AuthenticateInstallation(); // This line is obsolete in crash only builds
 
 			global::Xamarin.Forms.Forms.Init();
-			LoadApplication(new App());
+			this.LoadApplication(new App());
 
 			return base.FinishedLaunching(app, options);
 		}

@@ -17,7 +17,7 @@ namespace ColorLinesNG2.Droid {
 			base.OnCreate(bundle);
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
-			LoadApplication(new ColorLinesNG2.App());
+			this.LoadApplication(new ColorLinesNG2.App());
 		}
 		protected override void OnResume() {
 			base.OnResume();

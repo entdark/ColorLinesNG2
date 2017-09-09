@@ -145,7 +145,7 @@ namespace ColorLinesNG2 {
 				);
 			}
 
-			Content = backgroundLayout;
+			this.Content = backgroundLayout;
 		}
 
 		protected override bool OnBackButtonPressed() {
