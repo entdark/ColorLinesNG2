@@ -1869,8 +1869,9 @@ namespace ColorLinesNG2 {
 			var path = pathFinder.FindPath();
 			if (path.Count > 0) {
 				if (this.settings.Animations || this.teaching) {
-					var pathActual = new List<CLPoint>();
-					pathActual.Add(new CLPoint(from.Column, from.Row));
+					var pathActual = new List<CLPoint>() {
+						new CLPoint(from.Column, from.Row)
+					};
 					pathActual.AddRange(path);
 					CLColour colour = from.Colour;
 					to.Moving = true;
