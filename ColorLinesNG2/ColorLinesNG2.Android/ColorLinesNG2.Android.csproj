@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi;armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
@@ -57,7 +57,7 @@
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
     <Debugger>Xamarin</Debugger>
-    <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi;armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FormsViewGroup, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,6 +82,15 @@
     <Reference Include="Plugin.Settings.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\MonoAndroid10\Plugin.Settings.Abstractions.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SkiaSharp, Version=1.59.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SkiaSharp.1.59.1\lib\MonoAndroid\SkiaSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp.Views.Android, Version=1.59.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SkiaSharp.Views.1.59.1\lib\MonoAndroid\SkiaSharp.Views.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp.Views.Forms, Version=1.59.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SkiaSharp.Views.Forms.1.59.1\lib\MonoAndroid\SkiaSharp.Views.Forms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

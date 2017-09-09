@@ -1,11 +1,9 @@
-﻿#if !__ANDROID__ && !__IOS__  //UWP
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
 
 using ColorLinesNG2;
 
@@ -474,4 +472,3 @@ namespace CLRenderer {
 		}
 	}
 }
-#endif

@@ -27,7 +27,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformCulture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RendererSkia.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RendererGL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringsShared.cs" />
