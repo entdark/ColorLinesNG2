@@ -9,7 +9,7 @@ using Android.Support.V7.App;
 namespace ColorLinesNG2.Droid {
 	[Activity(
 		Label = "@string/ApplicationName",
-		Theme = "@style/MyTheme.Splash",
+		Theme = "@style/SplashTheme",
 		MainLauncher = true,
 		NoHistory = true,
 		ScreenOrientation = ScreenOrientation.Portrait

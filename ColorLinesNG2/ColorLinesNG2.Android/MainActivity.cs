@@ -8,7 +8,7 @@ namespace ColorLinesNG2.Droid {
 	[Activity(
 		Label = "@string/ApplicationName",
 		Icon = "@drawable/icon",
-		Theme = "@style/MyTheme.Main",
+		Theme = "@style/MainTheme",
 		ScreenOrientation = ScreenOrientation.Portrait,
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation
 	)]
