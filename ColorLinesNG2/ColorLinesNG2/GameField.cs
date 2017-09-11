@@ -630,7 +630,8 @@ namespace ColorLinesNG2 {
 					if (cell == null && i == row && j == column)
 						cell = ce;
 				});
-				this.CellAction(cell);
+				if (cell != null)
+					this.CellAction(cell);
 			}));
 			if (hackyViews == null)
 				hackyViews = new View [7]{ null, null, null, null, null, null, null };
