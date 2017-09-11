@@ -13,6 +13,8 @@ namespace ColorLinesNG2.Droid {
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation
 	)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
+		private CLCrashListener crashListener = new CLCrashListener();
+
 		protected override void OnCreate(Bundle bundle) {
 			base.OnCreate(bundle);
 
@@ -21,7 +23,7 @@ namespace ColorLinesNG2.Droid {
 		}
 		protected override void OnResume() {
 			base.OnResume();
-			CrashManager.Register(this, APIKeys.HockeyAppAndroid);
+			CrashManager.Register(this, APIKeys.HockeyAppAndroid, crashListener);
 		}
 		protected override void OnPause() {
 			UpdateManager.Unregister();
@@ -30,6 +32,12 @@ namespace ColorLinesNG2.Droid {
 		protected override void OnDestroy() {
 			UpdateManager.Unregister();
 			base.OnDestroy();
+		}
+
+		private class CLCrashListener : CrashManagerListener {
+			public override bool ShouldAutoUploadCrashes() {
+				return true;
+			}
 		}
 	}
 }
