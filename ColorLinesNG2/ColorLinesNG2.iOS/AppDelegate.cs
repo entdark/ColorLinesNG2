@@ -21,8 +21,8 @@ namespace ColorLinesNG2.iOS {
 
 			var manager = BITHockeyManager.SharedHockeyManager;
 			manager.Configure(APIKeys.HockeyAppiOS);
+			manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
 			manager.StartManager();
-			manager.Authenticator.AuthenticateInstallation(); // This line is obsolete in crash only builds
 
 			global::Xamarin.Forms.Forms.Init();
 			this.LoadApplication(new App());
