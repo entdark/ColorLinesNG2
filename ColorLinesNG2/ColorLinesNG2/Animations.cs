@@ -4,11 +4,11 @@ namespace CLAnimations {
 	public class CLAnim {
 		private CLAnim next = null;
 		private bool parallel = false;
-		public Func<long, bool, bool> Execute;
+		private Func<long, bool, bool> execute;
 		public CLAnim(long duration, Func<long, long, bool, bool> anim, bool parallel = false) {
 			bool firstCall = true;
 			long start = 0, end = 0;
-			this.Execute = (thisTime, checkTime) => {
+			this.execute = (thisTime, checkTime) => {
 				if (firstCall) {
 					start = thisTime;
 					end = thisTime + duration;
@@ -48,7 +48,7 @@ namespace CLAnimations {
 			CLAnim anim = CLAnim.anims;
 			while (anim != null) {
 				if (CLAnim.anims == anim || anim.parallel) {
-					if (anim.Execute(thisTime, checkTime)) {
+					if (anim.execute(thisTime, checkTime)) {
 						CLAnim.RemoveAnim(anim);
 					}
 				}
