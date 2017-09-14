@@ -4,8 +4,8 @@ using Xamarin.Forms;
 
 namespace ColorLinesNG2 {
 	public class App : Application {
-		public const double MinDesktopWidth = 420.0;
-		public const double MinDesktopHeight = 768.0;
+		public const double MinDesktopWidth = 377.0;
+		public const double MinDesktopHeight = 690.0;
 		public const double MinDesktopRatio = 0.546875;
 
 		public static readonly IAudioManager AudioManager;
