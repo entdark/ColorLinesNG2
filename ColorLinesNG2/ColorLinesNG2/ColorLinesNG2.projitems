@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IAudioManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILocalize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IStrings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)KeyMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformCulture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RendererSkia.cs" />

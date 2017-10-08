@@ -77,6 +77,16 @@ namespace CLDataTypes {
 		CLMax,
 	}
 
+	public enum CLKey {
+		CLNone,
+		CLLeft,
+		CLRight,
+		CLUp,
+		CLDown,
+		CLEnter,
+		CLEscape
+	}
+
     public struct CLPoint {
 		public int X { get; set; }
 		public int Y { get; set; }
@@ -404,7 +414,7 @@ namespace CLDataTypes {
 		}
 
 		public int Row, Column;
-		public bool Selected;
+		public bool Selected, KeySelected;
 		public Action Action;
 
 //		private View tap;
@@ -425,6 +435,7 @@ namespace CLDataTypes {
 			this.Row = row;
 			this.Column = column;
 			this.Selected = false;
+			this.KeySelected = false;
 			this.Top = top;
 			this.Bottom = bottom;
 			this.Left = left;

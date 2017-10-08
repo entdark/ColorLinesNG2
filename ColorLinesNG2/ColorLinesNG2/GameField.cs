@@ -177,6 +177,7 @@ namespace ColorLinesNG2 {
 		private bool activeField = true;
 		private bool activeLabels = true;
 		private bool firstSelected = false;
+		private bool selectableNavigation = false;
 		private int [][]fieldTextures;
 
 		private int rows, columns;
@@ -261,6 +262,12 @@ namespace ColorLinesNG2 {
 			for (uint i = 0; i < 3; i++) {
 				this.nextColours[i] = (CLColour)r.Next((int)CLColour.CLRed, (int)CLColour.CLMax);
 			}
+			MessagingCenter.Subscribe<object,KeyMessage>(this, KeyMessage.Pressed, (sender, message) => {
+				this.KeyNavigation(message.Key, message.IsCtrlPressed);
+			});
+			MessagingCenter.Subscribe<object>(this, KeyMessage.Inactive, (sender) => {
+				this.selectableNavigation = false;
+			});
 		}
 		private void CellAction(CLCell cell) {
 			if (this.activeField) {
@@ -521,6 +528,7 @@ namespace ColorLinesNG2 {
 				this.menu.Draw(textureId, bounds);
 			}
 			this.activeLabels = this.activeField = !CLAnim.ExecQueue(this.time) && this.popUpLabel == null;
+			this.DrawKeySelection();
 			if (!this.popUpAnimating) {
 				this.popUpLabel?.ExtraDraw?.Invoke();
 			}
@@ -560,6 +568,46 @@ namespace ColorLinesNG2 {
 			} else {
 				CLReDraw.Rect(-2.5f, 2.5f, 5.0f, 5.0f, textureId, fill, angle);
 			}
+		}
+		private bool hidingKeySelection = false;
+		private void DrawKeySelection() {
+			if (this.popUpLabel != null || this.achievementAnimating) {
+				this.hidingKeySelection = true;
+				return;
+			} else if (this.hidingKeySelection) {
+				if (!this.activeField) {
+					return;
+				} else {
+					this.hidingKeySelection = false;
+				}
+			}
+			if (!this.selectableNavigation)
+				return;
+			bool drawn = false;
+			float border = 0.07f * this.step;
+			this.ForAllCells((c,i,j) => {
+				if (drawn)
+					return;
+				if (!c.KeySelected)
+					return;
+				float x = (j * step - 1.0f) - border,
+					y = (1.0f - i * step) + border,
+					width = step + (border * 2.0f),
+					height = border;
+				//top
+				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				y -= (step + border);
+				//bottom
+				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				y += (step + border);
+				width = border;
+				height = step + (border * 2.0f);
+				//left
+				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				x += (step + border);
+				//right
+				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+			});
 		}
 
 		private int AddScore(int ballsCount) {
@@ -1053,7 +1101,7 @@ namespace ColorLinesNG2 {
 						this.ShowBackgroundSelection(CLBackgrounds.CLNebula, nebulaBg.GetCoordinates());
 					};
 				}
-				float border = 0.05f * step;
+				float border = 0.07f * step;
 				if (CLAchievement.GetAchieved(this.achievements, CLAchievements.CLBlow10)
 					|| CLAchievement.GetAchieved(this.achievements, CLAchievements.CLBlow13)) {
 					var ballsSkin = this.settings.BallsSkin;
@@ -2016,10 +2064,10 @@ namespace ColorLinesNG2 {
 							CLField.HideShowKeyboard(true);
 						});
 						this.popUpLabel.Action = this.popUpLabel.OutAction = delegate() {
-							this.popUpLabel.Action = this.popUpLabel.OutAction = null;
 							this.activeLabels = true;
 							if (this.popUpAnimating)
 								return;
+							this.popUpLabel.Action = this.popUpLabel.OutAction = null;
 							//TODO: add fancy adding new score animation
 							if (this.settings.Animations) {
 								this.activeField = false;
@@ -2138,6 +2186,7 @@ namespace ColorLinesNG2 {
 				}
 			}
 			if (this.settings.Animations) {
+				this.popUpAnimating = true;
 				CLAnim.AddToTop(new CLAnim(CLField.AnimClearingDuration, (start, end, checkTime) => {
 					return this.AnimFieldClearing(start, end, checkTime);
 				}, true), true);
@@ -2391,6 +2440,7 @@ namespace ColorLinesNG2 {
 			}*/
 			//start > this.time should never happen but let's be safe..
 			if (this.time > end || start > this.time) {
+				this.popUpAnimating = false;
 				this.AddBalls(true);
 				return true;
 			}
@@ -2822,6 +2872,171 @@ namespace ColorLinesNG2 {
 				return false;
 			this.menu.Pop();
 			return true;
+		}
+
+		private long lastKeyTime = 0L;
+		private void KeyNavigation(CLKey key, bool isCtrlPressed) {
+			if ((this.time - this.lastKeyTime) < 25) {
+				return;
+			}
+			this.lastKeyTime = this.time;
+			CLCell ks = null, ksNew = null;
+			this.ForAllCells((c,i,j) => {
+				if (c.KeySelected)
+					ks = c;
+			});
+			if (ks == null) {
+				ks = this.cells;
+				int odd = this.rows & 1;
+				int center = (this.rows >> 1) + odd;
+				while (center > 1) {
+					ks = ks.Bottom;
+					center--;
+				}
+				odd = this.columns & 1;
+				center = (this.columns >> 1) + odd;
+				while (center > 1) {
+					ks = ks.Right;
+					center--;
+				}
+				ks.KeySelected = true;
+				this.selectableNavigation = true;
+				if (!((key == CLKey.CLEnter || key == CLKey.CLEscape)
+					&& (this.popUpLabel?.Action != null
+					|| this.popUpLabel?.OutAction != null)))
+					return;
+			}
+			switch (key) {
+			default:
+			case CLKey.CLNone:
+				return;
+			case CLKey.CLLeft:
+				if (ks.Left != null) {
+					if (isCtrlPressed) {
+						CLCell findNew = ks.Left;
+						while (findNew != null && findNew.Left != null) {
+							if (findNew.Colour != CLColour.CLNone)
+								break;
+							findNew = findNew.Left;
+						}
+						ksNew = findNew;
+					} else {
+						ksNew = ks.Left;
+					}
+				} else {
+					CLCell findNew = ks.Right;
+					while (findNew != null && findNew.Right != null) {
+						findNew = findNew.Right;
+					}
+					ksNew = findNew;
+				}
+				break;
+			case CLKey.CLRight:
+				if (ks.Right != null) {
+					if (isCtrlPressed) {
+						CLCell findNew = ks.Right;
+						while (findNew != null && findNew.Right != null) {
+							if (findNew.Colour != CLColour.CLNone)
+								break;
+							findNew = findNew.Right;
+						}
+						ksNew = findNew;
+					} else {
+						ksNew = ks.Right;
+					}
+				} else {
+					CLCell findNew = ks.Left;
+					while (findNew != null && findNew.Left != null) {
+						findNew = findNew.Left;
+					}
+					ksNew = findNew;
+				}
+				break;
+			case CLKey.CLUp:
+				if (ks.Top != null) {
+					if (isCtrlPressed) {
+						CLCell findNew = ks.Top;
+						while (findNew != null && findNew.Top != null) {
+							if (findNew.Colour != CLColour.CLNone)
+								break;
+							findNew = findNew.Top;
+						}
+						ksNew = findNew;
+					} else {
+						ksNew = ks.Top;
+					}
+				} else {
+					CLCell findNew = ks.Bottom;
+					while (findNew != null && findNew.Bottom != null) {
+						findNew = findNew.Bottom;
+					}
+					ksNew = findNew;
+				}
+				break;
+			case CLKey.CLDown:
+				if (ks.Bottom != null) {
+					if (isCtrlPressed) {
+						CLCell findNew = ks.Bottom;
+						while (findNew != null && findNew.Bottom != null) {
+							if (findNew.Colour != CLColour.CLNone)
+								break;
+							findNew = findNew.Bottom;
+						}
+						ksNew = findNew;
+					} else {
+						ksNew = ks.Bottom;
+					}
+				} else {
+					CLCell findNew = ks.Top;
+					while (findNew != null && findNew.Top != null) {
+						findNew = findNew.Top;
+					}
+					ksNew = findNew;
+				}
+				break;
+			case CLKey.CLEnter:
+				if (this.popUpAnimating/* || this.achievementAnimating*/)
+					return;
+				if (this.popUpLabel != null) {
+					if (this.popUpLabel.Action != null) {
+						this.popUpLabel.Action?.Invoke();
+						return;
+					} else if (this.popUpLabel.OutAction != null) {
+						this.popUpLabel.OutAction?.Invoke();
+						return;
+					}
+				}
+				if (this.selectableNavigation && this.activeField)
+					this.CellAction(ks);
+				return;
+			case CLKey.CLEscape:
+				if (this.popUpAnimating/* || this.achievementAnimating*/)
+					return;
+				if (this.popUpLabel != null) {
+					if (this.popUpLabel.OutAction != null) {
+						this.popUpLabel.OutAction?.Invoke();
+						return;
+					}/* else if (this.popUpLabel.Action != null) {
+						this.popUpLabel.Action?.Invoke();
+						return;
+					}*/
+				}
+				return;
+			}
+			if (this.entry != null && this.entry.IsVisible)
+				return;
+			if (this.popUpLabel != null || (this.menu != null && this.menu.Show))
+				return;
+			if (this.popUpAnimating)
+				return;
+			if (ksNew == null)
+				return;
+			if (!this.selectableNavigation) {
+				this.selectableNavigation = true;
+				return;
+			}
+			ks.KeySelected = false;
+			ksNew.KeySelected = true;
 		}
 
 		private void SaveGame() {
