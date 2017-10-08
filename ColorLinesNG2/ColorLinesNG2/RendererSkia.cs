@@ -226,8 +226,9 @@ namespace CLRenderer {
 				if (this.Grayscale) {
 					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect, srcRect, paintGrayscale);
 				} else if (this.Fill != null) {
-					texturePaint.ColorFilter = SKColorFilter.CreateBlendMode(CLReEntity.ColorToSKColor((Color)this.Fill), SKBlendMode.Modulate);
-					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect, srcRect, texturePaint);
+					using (texturePaint.ColorFilter = SKColorFilter.CreateBlendMode(CLReEntity.ColorToSKColor((Color)this.Fill), SKBlendMode.Modulate)) {
+						CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect, srcRect, texturePaint);
+					}
 				} else {
 					CLReEntity.CanvasDrawImage(canvas, images[this.TextureId], destRect);
 				}
