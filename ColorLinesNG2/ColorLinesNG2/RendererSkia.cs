@@ -177,8 +177,8 @@ namespace CLRenderer {
 				canvas.DrawImage(image, (SKRect)src, dest, paint);
 		}
 
-		private static HashSet<int> loadingTextures = new HashSet<int>();
-		private static bool loadAllTextures =
+		private static readonly HashSet<int> loadingTextures = new HashSet<int>();
+		private static readonly bool loadAllTextures =
 			Device.RuntimePlatform == Device.Android ||
 			Device.RuntimePlatform == Device.iOS ||
 			Device.Idiom == TargetIdiom.Desktop;
@@ -241,7 +241,7 @@ namespace CLRenderer {
 			}
 		}
 
-		private static SKPaint paintGrayscale = new SKPaint() {
+		private static readonly SKPaint paintGrayscale = new SKPaint() {
 			ColorFilter = SKColorFilter.CreateColorMatrix(new float[20]{
 				0.299f, 0.587f, 0.114f, 0.0f, 0.0f,
 				0.299f, 0.587f, 0.114f, 0.0f, 0.0f,
@@ -249,8 +249,8 @@ namespace CLRenderer {
 				0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 			})
 		};
-		private static SKPaint rectPaint = new SKPaint();
-		private static SKPaint texturePaint = new SKPaint();
+		private static readonly SKPaint rectPaint = new SKPaint();
+		private static readonly SKPaint texturePaint = new SKPaint();
 	}
 	public static class CLReDraw {
 		public static readonly Color WhiteColor = Color.FromRgba(1.0, 1.0, 1.0, 1.0);
