@@ -89,7 +89,7 @@ namespace ColorLinesNG2 {
 		private void Init(RelativeLayout mainLayout, View []hackyViews = null) {
 			float textureScale = this.Width * 0.00087f;
 
-			this.SetScreenOpenGLCoords(this.Width, this.Height);
+			this.SetScreenVirtualCoords(this.Width, this.Height);
 
 			var textureIdsDouble = new int[embeddedTextures.Length][];
 			int i = 0, size = 0;
@@ -139,7 +139,7 @@ namespace ColorLinesNG2 {
 			this.time.Start();
 		}
 
-		private void SetScreenOpenGLCoords(int w, int h) {
+		private void SetScreenVirtualCoords(int w, int h) {
 			if (w > h) {
 				Top = 1.0f;
 				Bottom = -Top;
