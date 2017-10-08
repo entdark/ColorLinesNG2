@@ -178,6 +178,10 @@ namespace CLRenderer {
 		}
 
 		private static HashSet<int> loadingTextures = new HashSet<int>();
+		private static bool loadAllTextures =
+			Device.RuntimePlatform == Device.Android ||
+			Device.RuntimePlatform == Device.iOS ||
+			Device.Idiom == TargetIdiom.Desktop;
 		public void Render(SKImage []images, ColorLinesNG skiaView, SKCanvas canvas) {
 			var destRect = CLReEntity.VirtualToSkiaCoords(this.Verticies, skiaView);
 			SKRect? srcRect = null;
@@ -190,12 +194,29 @@ namespace CLRenderer {
 			}
 			if (this.TextureId >= 0) {
 				if (images[this.TextureId] == null) {
-					if (!loadingTextures.Contains(this.TextureId)) {
-						loadingTextures.Add(this.TextureId);
-						Task.Run(async () => {
-							images[this.TextureId] = await skiaView.LoadTexture(this.TextureId);
-							loadingTextures.Remove(this.TextureId);
-						});
+					if (loadingTextures.Count <= 0 && loadAllTextures) {
+						if (!loadingTextures.Contains(this.TextureId)) {
+							for (int i = 0; i < images.Length; i++) {
+								if (images[i] == null)
+									loadingTextures.Add(i);
+							}
+							Task.Run(async () => {
+								for (int i = 0; i < images.Length; i++) {
+									if (images[i] == null) {
+										images[i] = await skiaView.LoadTexture(i);
+										loadingTextures.Remove(i);
+									}
+								}
+							});
+						}
+					} else if (!loadAllTextures) {
+						if (!loadingTextures.Contains(this.TextureId)) {
+							loadingTextures.Add(this.TextureId);
+							Task.Run(async () => {
+								images[this.TextureId] = await skiaView.LoadTexture(this.TextureId);
+								loadingTextures.Remove(this.TextureId);
+							});
+						}
 					}
 					if (this.Angle != 0.0f) {
 						canvas.Restore();
@@ -475,3 +496,4 @@ namespace CLRenderer {
 		}
 	}
 }
+ 
