@@ -104,6 +104,9 @@ namespace ColorLinesNG2 {
 				i++;
 			}
 			this.textureIds = new int[size];
+			//when the app is restarted (Android only for now)
+			//then we cannot reload embedded resources
+			//so we store them static and won't reload afterward
 			if (ColorLinesNG.images == null) {
 				ColorLinesNG.images = new SKImage[size];
 			}
