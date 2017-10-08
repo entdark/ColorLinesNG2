@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ColorLinesNG2", "ColorLinesNG2\ColorLinesNG2\ColorLinesNG2.shproj", "{ED40D77C-A7A3-4BAC-B3F9-34355607F7E0}"
 EndProject
@@ -15,6 +15,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ColorLinesNG2\ColorLinesNG2\ColorLinesNG2.projitems*{0233a3b3-357c-478b-9184-ae5a3a563a70}*SharedItemsImports = 4
 		ColorLinesNG2\ColorLinesNG2\ColorLinesNG2.projitems*{37c396f9-d355-4a57-a411-31efa9e94dd8}*SharedItemsImports = 4
+		ColorLinesNG2\ColorLinesNG2\ColorLinesNG2.projitems*{6c8c6c94-7e7f-482b-97ce-a7e90e21add0}*SharedItemsImports = 4
 		ColorLinesNG2\ColorLinesNG2\ColorLinesNG2.projitems*{ed40d77c-a7a3-4bac-b3f9-34355607f7e0}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -211,5 +212,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1906CBEF-3EED-46E4-B079-3D7D9BB4D2A4}
 	EndGlobalSection
 EndGlobal
