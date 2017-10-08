@@ -1,9 +1,14 @@
-﻿using Xamarin.Forms;
-
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.ApplicationModel.Core;
+using Windows.System;
 using Windows.UI;
-using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+
+using Xamarin.Forms;
+
+using CLDataTypes;
 
 namespace ColorLinesNG2.UWP {
 	public sealed partial class MainPage : IAudioManagerControl {
@@ -39,6 +44,10 @@ namespace ColorLinesNG2.UWP {
 //					isFullScreenLast = isFullScreen;
 				};
 				this.SetUpTitleBar(false);
+				Window.Current.CoreWindow.KeyDown += this.CoreWindowKeyDown;
+				Window.Current.CoreWindow.KeyUp += this.CoreWindowKeyUp;
+//				Window.Current.CoreWindow.TouchHitTesting += this.CoreWindowTouch;
+				Window.Current.CoreWindow.PointerReleased += this.CoreWindowPointerReleased;
 			}
 
 			this.LoadApplication(new ColorLinesNG2.App());
@@ -46,6 +55,54 @@ namespace ColorLinesNG2.UWP {
 			this.Control = this.Content as Canvas;
 			if (this.Control == null)
 				this.Control = new Canvas();
+		}
+
+		private bool isCtrlPressed = false;
+		private void CoreWindowKeyDown(CoreWindow sender, KeyEventArgs ev) {
+			CLKey clKey;
+			var vk = ev.VirtualKey;
+			switch (vk) {
+			default:
+				return;
+			case VirtualKey.Control:
+				isCtrlPressed = true;
+				return;
+			case VirtualKey.LeftButton:
+				MessagingCenter.Send<object>(this, KeyMessage.Inactive);
+				return;
+			case VirtualKey.Left:
+				clKey = CLKey.CLLeft;
+				break;
+			case VirtualKey.Right:
+				clKey = CLKey.CLRight;
+				break;
+			case VirtualKey.Up:
+				clKey = CLKey.CLUp;
+				break;
+			case VirtualKey.Down:
+				clKey = CLKey.CLDown;
+				break;
+			case VirtualKey.Enter:
+			case VirtualKey.Space:
+				clKey = CLKey.CLEnter;
+				break;
+			case VirtualKey.Escape:
+				clKey = CLKey.CLEscape;
+				break;
+			}
+			if (clKey == CLKey.CLNone)
+				return;
+			MessagingCenter.Send<object,KeyMessage>(this, KeyMessage.Pressed, new KeyMessage(clKey, isCtrlPressed));
+		}
+		private void CoreWindowKeyUp(CoreWindow sender, KeyEventArgs ev) {
+			if (ev.VirtualKey == VirtualKey.Control)
+				isCtrlPressed = false;
+		}
+		private void CoreWindowTouch(CoreWindow sender, TouchHitTestingEventArgs ev) {
+			MessagingCenter.Send<object>(this, KeyMessage.Inactive);
+		}
+		private void CoreWindowPointerReleased(CoreWindow sender, PointerEventArgs ev) {
+			MessagingCenter.Send<object>(this, KeyMessage.Inactive);
 		}
 
 		private void SetUpTitleBar(bool isFullScreen) {
