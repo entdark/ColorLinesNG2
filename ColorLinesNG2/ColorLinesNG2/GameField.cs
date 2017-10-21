@@ -171,6 +171,9 @@ namespace ColorLinesNG2 {
 
 		public const long StartMovingSound = CLField.AnimMovingDurationCoeff*5;
 
+		public const long KeyNavigationFlashDuration = 1337;
+		public const long KeyNavigationFlashDelay = 700;
+
 		public const int BestScoresCount = 10;
 
 		private long time;
@@ -570,6 +573,7 @@ namespace ColorLinesNG2 {
 			}
 		}
 		private bool hidingKeySelection = false;
+		private long keySelectionFlashTime = 0;
 		private void DrawKeySelection() {
 			if (this.popUpLabel != null || this.achievementAnimating) {
 				this.hidingKeySelection = true;
@@ -579,12 +583,27 @@ namespace ColorLinesNG2 {
 					return;
 				} else {
 					this.hidingKeySelection = false;
+					keySelectionFlashTime = this.time + CLField.KeyNavigationFlashDelay;
 				}
 			}
 			if (!this.selectableNavigation)
 				return;
 			bool drawn = false;
 			float border = 0.07f * this.step;
+
+			Color fill;
+			long delta = this.time - keySelectionFlashTime;
+			if (delta < 0) {
+				fill = CLField.GreenColor;
+			} else {
+				const long duration = CLField.KeyNavigationFlashDuration;
+				while (delta > duration) {
+					delta -= duration;
+				}
+				float danim = CLAnim.Jump(delta, duration);
+				fill = CLField.GreenColor.MultiplyAlpha(1.0f - danim);
+			}
+
 			this.ForAllCells((c,i,j) => {
 				if (drawn)
 					return;
@@ -595,18 +614,18 @@ namespace ColorLinesNG2 {
 					width = step + (border * 2.0f),
 					height = border;
 				//top
-				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				CLReDraw.Rect(x, y, width, height, fill);
 				y -= (step + border);
 				//bottom
-				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
-				y += (step + border);
+				CLReDraw.Rect(x, y, width, height, fill);
+				y += step;
 				width = border;
-				height = step + (border * 2.0f);
+				height = step;
 				//left
-				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				CLReDraw.Rect(x, y, width, height, fill);
 				x += (step + border);
 				//right
-				CLReDraw.Rect(x, y, width, height, CLField.GreenColor);
+				CLReDraw.Rect(x, y, width, height, fill);
 			});
 		}
 
@@ -2901,6 +2920,7 @@ namespace ColorLinesNG2 {
 				}
 				ks.KeySelected = true;
 				this.selectableNavigation = true;
+				keySelectionFlashTime = this.time + CLField.KeyNavigationFlashDelay;
 				if (!((key == CLKey.CLEnter || key == CLKey.CLEscape)
 					&& (this.popUpLabel?.Action != null
 					|| this.popUpLabel?.OutAction != null)))
@@ -3033,8 +3053,10 @@ namespace ColorLinesNG2 {
 				return;
 			if (!this.selectableNavigation) {
 				this.selectableNavigation = true;
+				keySelectionFlashTime = this.time + CLField.KeyNavigationFlashDelay;
 				return;
 			}
+			keySelectionFlashTime = this.time + CLField.KeyNavigationFlashDelay;
 			ks.KeySelected = false;
 			ksNew.KeySelected = true;
 		}
