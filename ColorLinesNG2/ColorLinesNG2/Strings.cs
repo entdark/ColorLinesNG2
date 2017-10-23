@@ -22,6 +22,7 @@
 		public string Gallery => "GALLERY";
 		public string GameOver => "GAME OVER";
 		public string Hi => "HI";
+		public string Loading => "LOADING...";
 		public string Menu => "MENU";
 		public string Music => "MUSIC";
 		public string Name => "NAME:";
@@ -70,6 +71,7 @@
 		public string Gallery => "ГАЛЕРЕЯ";
 		public string GameOver => "ИГРА ОКОНЧЕНА";
 		public string Hi => "ПРИВЕТ";
+		public string Loading => "ЗАГРУЗКА...";
 		public string Menu => "МЕНЮ";
 		public string Music => "МУЗЫКА";
 		public string Name => "ИМЯ:";

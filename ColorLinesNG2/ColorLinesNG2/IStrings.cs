@@ -22,6 +22,7 @@
 		string FirstReward { get; }
 		string GameOver { get; }
 		string Hi { get; }
+		string Loading { get; }
 		string Menu { get; }
 		string Music { get; }
 		string Name { get; }

@@ -76,6 +76,8 @@ namespace ColorLinesNG2 {
 			return this.field.OnBackButtonPressed();
 		}
 
+		public event EventHandler Inited;
+
 		private static readonly SKColor bgColor = new SKColor(0, 0, 0, 255);
 		private void Render(SKCanvas canvas) {
 			this.reQueue.Clear();
@@ -137,6 +139,8 @@ namespace ColorLinesNG2 {
 			this.reQueue = new CLReQueue(mainLayout, ColorLinesNG.images, specialBgTextureIds);
 
 			this.time.Start();
+
+			this.Inited?.Invoke(this, new EventArgs());
 		}
 
 		private void SetScreenVirtualCoords(int w, int h) {

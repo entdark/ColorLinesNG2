@@ -145,6 +145,32 @@ namespace ColorLinesNG2 {
 				);
 			}
 
+			var loadingLabel = new CLFormsLabel() {
+				Text = App.Strings.Loading,
+				TextScale = 1.337f,
+				BackgroundColor = Color.FromRgba(0, 0, 0, 255)
+			};
+			backgroundLayout.Children.Add(
+				loadingLabel,
+				Constraint.RelativeToParent(parent => {
+					return 0.0;
+				}),
+				Constraint.RelativeToParent(parent => {
+					return 0.0;
+				}),
+				Constraint.RelativeToParent(parent => {
+					return parent.Width;
+				}),
+				Constraint.RelativeToParent(parent => {
+					return parent.Height;
+				})
+			);
+			this.Game.Inited += (sender, ev) => {
+				Device.BeginInvokeOnMainThread(() => {
+					backgroundLayout.Children.Remove(loadingLabel);
+				});
+			};
+
 			this.Content = backgroundLayout;
 		}
 
