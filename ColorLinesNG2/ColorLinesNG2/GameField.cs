@@ -3040,6 +3040,9 @@ namespace ColorLinesNG2 {
 						this.popUpLabel.Action?.Invoke();
 						return;
 					}*/
+				} else if (this.menu != null && this.menu.Show) {
+					this.menu.Pop();
+					return;
 				}
 				return;
 			}
