@@ -3019,9 +3019,11 @@ namespace ColorLinesNG2 {
 					return;
 				if (this.popUpLabel != null) {
 					if (this.popUpLabel.Action != null) {
+						CLField.PlaySound("MenuNav.mp3");
 						this.popUpLabel.Action?.Invoke();
 						return;
 					} else if (this.popUpLabel.OutAction != null) {
+						CLField.PlaySound("MenuNav.mp3");
 						this.popUpLabel.OutAction?.Invoke();
 						return;
 					}
@@ -3034,9 +3036,11 @@ namespace ColorLinesNG2 {
 					return;
 				if (this.popUpLabel != null) {
 					if (this.popUpLabel.OutAction != null) {
+						CLField.PlaySound("MenuNav.mp3");
 						this.popUpLabel.OutAction?.Invoke();
 						return;
 					}/* else if (this.popUpLabel.Action != null) {
+						CLField.PlaySound("MenuNav.mp3");
 						this.popUpLabel.Action?.Invoke();
 						return;
 					}*/
