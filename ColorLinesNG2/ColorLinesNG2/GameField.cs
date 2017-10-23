@@ -575,7 +575,7 @@ namespace ColorLinesNG2 {
 		private bool hidingKeySelection = false;
 		private long keySelectionFlashTime = 0;
 		private void DrawKeySelection() {
-			if (this.popUpLabel != null || this.achievementAnimating) {
+			if (this.popUpLabel != null || (this.menu != null && this.menu.Show) || this.achievementAnimating) {
 				this.hidingKeySelection = true;
 				return;
 			} else if (this.hidingKeySelection) {
