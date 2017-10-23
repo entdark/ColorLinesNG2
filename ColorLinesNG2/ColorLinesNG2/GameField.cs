@@ -566,6 +566,11 @@ namespace ColorLinesNG2 {
 			int textureId = this.GetTextureId(CLTextureTypes.CLBackgrounds, bg);
 			Color fill = CLField.WhiteColor.MultiplyAlpha(0.5f + 0.5f * danim);
 			float angle = 69.0f + 23.0f * this.time * 0.00002f;
+#if __IOS__
+			if (App.iPhoneX) {
+				CLReDraw.Rect(-2.4f, 2.4f, 4.8f, 4.8f, textureId, fill, angle);
+			} else
+#endif
 			if (Device.Idiom != TargetIdiom.Desktop) {
 				CLReDraw.Rect(-2.0f, 2.0f, 4.0f, 4.0f, textureId, fill, angle);
 			} else {

@@ -45,6 +45,14 @@ namespace ColorLinesNG2 {
 				EnableTouchEvents = false
 			};
 			this.GameView.PaintSurface += (sender, ev) => {
+#if __IOS__
+				if (App.iPhoneX) {
+					this.X = 0;
+					this.Y = (int)(44.0f * UIKit.UIScreen.MainScreen.Scale);
+					this.Width = ev.RenderTarget.Width;
+					this.Height = ev.RenderTarget.Height - (int)(88.0f * UIKit.UIScreen.MainScreen.Scale);
+				} else
+#endif
 				if (Device.Idiom == TargetIdiom.Desktop) {
 					int width = ev.RenderTarget.Width;
 					int height = ev.RenderTarget.Height;

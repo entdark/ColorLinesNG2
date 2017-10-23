@@ -18,7 +18,7 @@ namespace ColorLinesNG2 {
 			this.Game = new ColorLinesNG(mainLayout, hackyViews);
 
 			bool desktop = Device.Idiom == TargetIdiom.Desktop;
-			if (!desktop) {
+			if (!desktop && !App.iPhoneX) {
 				mainLayout.Children.Add(
 					this.Game.GameView,
 					Constraint.RelativeToParent(parent => {
@@ -41,25 +41,13 @@ namespace ColorLinesNG2 {
 						return 0.0;
 					}),
 					Constraint.RelativeToParent(parent => {
-						switch (Device.RuntimePlatform) {
-						default:
-						case Device.Android:
-							return 0.0;
-						case Device.iOS:
-							return 20.0;
-						}
+						return 0.0;
 					}),
 					Constraint.RelativeToParent(parent => {
 						return parent.Width;
 					}),
 					Constraint.RelativeToParent(parent => {
-						switch (Device.RuntimePlatform) {
-						default:
-						case Device.Android:
-							return parent.Height;
-						case Device.iOS:
-							return parent.Height - 20.0;
-						}
+						return parent.Height;
 					})
 				);
 			}
@@ -76,10 +64,9 @@ namespace ColorLinesNG2 {
 					Constraint.RelativeToParent(parent => {
 						switch (Device.RuntimePlatform) {
 						default:
-						case Device.Android:
 							return 0.0;
 						case Device.iOS:
-							return 20.0;
+							return App.iOSTopOffset;
 						}
 					}),
 					Constraint.RelativeToParent(parent => {
@@ -88,10 +75,9 @@ namespace ColorLinesNG2 {
 					Constraint.RelativeToParent(parent => {
 						switch (Device.RuntimePlatform) {
 						default:
-						case Device.Android:
 							return parent.Height;
 						case Device.iOS:
-							return parent.Height - 20.0;
+							return parent.Height - (App.iOSTopOffset + App.iOSBottomOffset);
 						}
 					})
 				);
