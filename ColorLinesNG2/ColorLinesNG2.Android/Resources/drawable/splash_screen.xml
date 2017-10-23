@@ -7,7 +7,7 @@
 	<bitmap
 		android:src="@drawable/splash"
 		android:tileMode="disabled"
-		android:gravity="fill"
+		android:gravity="center"
 		android:adjustViewBounds="true"
 		android:scaleType="centerCrop"/>
   </item>
