@@ -593,7 +593,7 @@ namespace ColorLinesNG2 {
 
 			Color fill;
 			long delta = this.time - keySelectionFlashTime;
-			if (delta < 0) {
+			if (delta < 0 || !this.settings.Animations) {
 				fill = CLField.GreenColor;
 			} else {
 				const long duration = CLField.KeyNavigationFlashDuration;
