@@ -106,11 +106,17 @@ namespace ColorLinesNG2 {
 				i++;
 			}
 			this.textureIds = new int[size];
+			bool loadTexture = /*!embeddedTextures[j][k].InitIgnore || */
+				Device.RuntimePlatform == Device.Android ||
+				Device.RuntimePlatform == Device.iOS ||
+				Device.Idiom == TargetIdiom.Desktop;
 			//when the app is restarted (Android only for now)
 			//then we cannot reload embedded resources
 			//so we store them static and won't reload afterward
 			if (ColorLinesNG.images == null) {
 				ColorLinesNG.images = new SKImage[size];
+			} else {
+				loadTexture = false;
 			}
 			int []specialBgTextureIds = new int[2];
 			for (i = 0; i < size; i++) {
@@ -119,6 +125,9 @@ namespace ColorLinesNG2 {
 					int k = 0;
 					foreach (var texture in texturesArray) {
 						if (i == sum) {
+							if (loadTexture) {
+								ColorLinesNG.images[i] = LoadTexture(embeddedTextures[j][k], textureScale);
+							}
 							textureIdsDouble[j][k] = i;
 							if (embeddedTextures[j][k].Name.Equals("CLNG_Stars.png")) {
 								specialBgTextureIds[0] = i;
