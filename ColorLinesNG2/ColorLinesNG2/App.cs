@@ -4,8 +4,8 @@ using Xamarin.Forms;
 
 namespace ColorLinesNG2 {
 	public class App : Application {
-		public const double MinDesktopWidth = 377.0;
-		public const double MinDesktopHeight = 690.0;
+		public const double MinDesktopWidth = 350.0;
+		public const double MinDesktopHeight = 640.0;
 		public const double MinDesktopRatio = 0.546875;
 
 		private static bool? isPhoneX = null;
@@ -13,17 +13,7 @@ namespace ColorLinesNG2 {
 #if __IOS__
 			get {
 				if (isPhoneX == null) {
-					if (new System.Version(ObjCRuntime.Constants.Version) < new System.Version(11, 0)) {
-						isPhoneX = false;
-					} else {
-						if (ObjCRuntime.Runtime.Arch == ObjCRuntime.Arch.DEVICE) {
-							using (var context = new LocalAuthentication.LAContext()) {
-								isPhoneX = context.BiometryType == LocalAuthentication.LABiometryType.TypeFaceId;
-							}
-						} else {
-							isPhoneX = UIKit.UIScreen.MainScreen.PreferredMode.Size.Height == 2436;
-						}
-					}
+					isPhoneX = UIKit.UIScreen.MainScreen.NativeBounds.Height == 2436;
 				}
 				return (bool)isPhoneX;
 			}
