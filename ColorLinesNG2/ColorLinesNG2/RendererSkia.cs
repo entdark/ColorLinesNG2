@@ -194,7 +194,7 @@ namespace CLRenderer {
 						loadingTextures.Add(this.TextureId);
 						Task.Run(async () => {
 							images[this.TextureId] = await skiaView.LoadTexture(this.TextureId);
-							loadingTextures.Remove(this.TextureId);
+//							loadingTextures.Remove(this.TextureId);
 						});
 					}
 					if (this.Angle != 0.0f) {
