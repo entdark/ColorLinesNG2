@@ -351,7 +351,7 @@ namespace ColorLinesNG2 {
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.84;
 				break;
 			case Device.WinPhone:
-			case Device.Windows:
+			case Device.UWP:
 				fontFamily = "Assets/Fonts/PressStart2P.ttf#Press Start 2P";
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.5;
 				break;
@@ -402,7 +402,7 @@ namespace ColorLinesNG2 {
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.8;
 				break;
 			case Device.WinPhone:
-			case Device.Windows:
+			case Device.UWP:
 				fontFamily = "Assets/Fonts/PressStart2P.ttf#Press Start 2P";
 				namedSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) * 0.5;
 				break;
