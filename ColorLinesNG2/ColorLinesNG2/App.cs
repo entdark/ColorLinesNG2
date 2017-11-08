@@ -13,17 +13,7 @@ namespace ColorLinesNG2 {
 #if __IOS__
 			get {
 				if (isPhoneX == null) {
-					if (new System.Version(ObjCRuntime.Constants.Version) < new System.Version(11, 0)) {
-						isPhoneX = false;
-					} else {
-						if (ObjCRuntime.Runtime.Arch == ObjCRuntime.Arch.DEVICE) {
-							using (var context = new LocalAuthentication.LAContext()) {
-								isPhoneX = context.BiometryType == LocalAuthentication.LABiometryType.TypeFaceId;
-							}
-						} else {
-							isPhoneX = UIKit.UIScreen.MainScreen.PreferredMode.Size.Height == 2436;
-						}
-					}
+					isPhoneX = UIKit.UIScreen.MainScreen.NativeBounds.Height == 2436;
 				}
 				return (bool)isPhoneX;
 			}
