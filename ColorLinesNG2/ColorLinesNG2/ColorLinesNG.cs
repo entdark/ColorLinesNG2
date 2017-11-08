@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -178,7 +177,6 @@ namespace ColorLinesNG2 {
 
 		public Task<SKImage> LoadTexture(int textureId) {
 			float textureScale = this.Width * 0.00087f;
-			int size = ColorLinesNG.images.Length;
 			int i = 0, sum = 0;
 			foreach (var texturesArray in embeddedTextures) {
 				int j = 0;

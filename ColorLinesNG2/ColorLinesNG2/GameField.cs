@@ -656,7 +656,6 @@ namespace ColorLinesNG2 {
 			this.right = right;
 			this.bottom = bottom;
 			this.top = top;
-			this.time = time;
 
 			float stepLocal;
 			if (this.rows > this.columns)
