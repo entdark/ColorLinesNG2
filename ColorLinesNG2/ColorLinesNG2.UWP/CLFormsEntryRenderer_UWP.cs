@@ -29,13 +29,13 @@ namespace ColorLinesNG2.UWP {
 					DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
 				double top;
 				if (w >= 1439.9) //1440
-					top = 16.0;
+					top = 15.5;
 				else if (w >= 1079.9) //1080
-					top = 19.0;
+					top = 18.5;
 				else if (w >= 767.9) //768
 					top = 14.5;
 				else if (w >= 719.9) //720
-					top = 16.5;
+					top = 16.0;
 				else //480
 					top = 13.37;
 				this.Control.Padding = new Windows.UI.Xaml.Thickness(0.0, top, 0.0, 0.0);
@@ -73,7 +73,7 @@ namespace ColorLinesNG2.UWP {
 			double height = (this.Element.Parent as View).Height > 0.0 ?
 				(this.Element.Parent as View).Height :
 				ApplicationView.GetForCurrentView().VisibleBounds.Height;
-			this.Control.Padding = new Windows.UI.Xaml.Thickness(0.0, height*0.024096, 0.0, 0.0);
+			this.Control.Padding = new Windows.UI.Xaml.Thickness(0.0, height*0.0235, 0.0, 0.0);
 		}
 		private void ResizeFont() {
 			if (this.Control == null) return;
