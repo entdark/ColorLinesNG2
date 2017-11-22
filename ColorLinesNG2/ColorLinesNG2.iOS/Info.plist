@@ -27,7 +27,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Color Lines NG</string>
 	<key>CFBundleVersion</key>
-	<string>1.5</string>
+	<string>1.7</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIAppFonts</key>
@@ -47,8 +47,8 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>CFBundleShortVersionString</key>
-	<string>1.5</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>This app requires access to the photo library.</string>
+	<string>1.7</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library.</string>
 </dict>
 </plist>
