@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="21354VlBor.46291C8C5B8C0" Publisher="CN=69D31301-80AB-4411-B2D7-15EE04299798" Version="1.1.0.0" />
+  <Identity Name="21354VlBor.46291C8C5B8C0" Publisher="CN=69D31301-80AB-4411-B2D7-15EE04299798" Version="1.2.0.0" />
   <mp:PhoneIdentity PhoneProductId="9828e41d-d051-4657-a707-029f4cb2e7d7" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Color Lines NG</DisplayName>
