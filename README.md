@@ -1,12 +1,6 @@
 # Color Lines NG
 A remake of the game "Color Lines" with a classic interface for Android, iOS and UWP using Xamarin, Xamarin Forms, OpenGL and Skia (SkiaSharp).
 
-## Supported Devices
-* Android smartphones and tablets
-* iPhone, iPhone X and iPad
-* Windows 10 smartphones, tablets and PCs
-*In development: desktop versions for Windows XP/Vista/7/8/8.1, macOS, Linux*
-
 ## Download
 [![Google play][2]][1] [![App Store][4]][3] [![Windows Store][6]][5]
 
@@ -17,6 +11,12 @@ A remake of the game "Color Lines" with a classic interface for Android, iOS and
   [5]: https://www.microsoft.com/store/apps/9nt70zzmfrl5
   [6]: http://i.imgur.com/fzk3qbz.png (Windows Store)
   
+## Supported Devices
+* Android smartphones and tablets
+* iPhone, iPhone X and iPad
+* Windows 10 smartphones, tablets and PCs
+*In development: desktop versions for Windows XP/Vista/7/8/8.1, macOS, Linux*
+
 ## Screenshots
 ![Android, iPhone, Windows 10 Mobile, iPad](https://i.imgur.com/cQe5r3k.png)
 ![Windows 10 Desktop, iPhone X](https://i.imgur.com/WAxfRV6.png)
