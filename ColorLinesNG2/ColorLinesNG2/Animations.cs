@@ -48,7 +48,11 @@ namespace CLAnimations {
 			CLAnim anim = CLAnim.anims;
 			while (anim != null) {
 				if (CLAnim.anims == anim || anim.parallel) {
-					if (anim.execute(thisTime, checkTime)) {
+					if (
+#if __ANDROID__ //let's keep that for Android only for now since only Android devices have reported that
+						anim.execute != null &&
+#endif
+						anim.execute(thisTime, checkTime)) {
 						CLAnim.RemoveAnim(anim);
 					}
 				}
