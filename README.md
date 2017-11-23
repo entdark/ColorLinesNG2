@@ -15,6 +15,7 @@ A remake of the game "Color Lines" with a classic interface for Android, iOS and
 * Android smartphones and tablets
 * iPhone, iPhone X and iPad
 * Windows 10 smartphones, tablets and PCs
+
 *In development: desktop versions for Windows XP/Vista/7/8/8.1, macOS, Linux*
 
 ## Screenshots
