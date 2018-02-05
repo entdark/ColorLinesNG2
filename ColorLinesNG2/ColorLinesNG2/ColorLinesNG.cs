@@ -33,6 +33,10 @@ namespace ColorLinesNG2 {
 		private static SKImage []images;
 		private Stopwatch time;
 
+#if __IOS__
+		private bool wentSleeping = false;
+#endif
+
 		public ColorLinesNG(RelativeLayout mainLayout, View []hackyViews = null) {
 			this.Bottom = -1.0f;
 			this.Top = 1.0f;
@@ -45,6 +49,17 @@ namespace ColorLinesNG2 {
 			};
 			this.GameView.PaintSurface += (sender, ev) => {
 #if __IOS__
+				if (this.Sleeping) {
+					if (!this.wentSleeping) {
+						this.GameView.HasRenderLoop = false;
+						this.wentSleeping = true;
+					}
+					return;
+				} else if (this.wentSleeping) {
+					this.wentSleeping = false;
+				}
+				this.Sleeping = false;
+
 				if (App.iPhoneX) {
 					this.X = 0;
 					this.Y = (int)(44.0f * UIKit.UIScreen.MainScreen.Scale);
