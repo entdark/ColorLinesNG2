@@ -1,8 +1,14 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 using Xamarin.Forms;
 
-namespace ColorLinesNG2 {
+#if __IOS__
+using UIKit;
+#endif
+
+namespace ColorLinesNG2
+{
 	public class App : Application {
 		public const double MinDesktopWidth = 350.0;
 		public const double MinDesktopHeight = 640.0;
@@ -13,7 +19,10 @@ namespace ColorLinesNG2 {
 #if __IOS__
 			get {
 				if (isPhoneX == null) {
-					isPhoneX = UIKit.UIScreen.MainScreen.NativeBounds.Height == 2436;
+					isPhoneX = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone
+							&& UIDevice.CurrentDevice.CheckSystemVersion(11, 0)
+							&& ((new UIWindow(UIScreen.MainScreen.Bounds)).SafeAreaInsets.Top is nfloat top)
+							&& top > 24.0f;
 				}
 				return (bool)isPhoneX;
 			}
