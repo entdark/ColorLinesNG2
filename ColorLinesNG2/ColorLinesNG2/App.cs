@@ -65,10 +65,10 @@ namespace ColorLinesNG2 {
 
 		protected override void OnResume() {
 			// Handle when your app resumes
+			base.OnResume();
 			this.game.Sleeping = false;
 			this.game.GameView.HasRenderLoop = true;
 			App.AudioManager.ReactivateAudioSession();
-			base.OnResume();
 		}
 	}
 }
