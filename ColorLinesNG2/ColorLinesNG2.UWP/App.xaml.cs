@@ -8,7 +8,9 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-using Microsoft.HockeyApp;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ColorLinesNG2.UWP {
 	/// <summary>
@@ -20,6 +22,8 @@ namespace ColorLinesNG2.UWP {
 		/// executed, and as such is the logical equivalent of main() or WinMain().
 		/// </summary>
 		public App() {
+			AppCenter.Start(APIKeys.AppCenterUWP, typeof(Analytics), typeof(Crashes));
+
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
 		}
@@ -50,8 +54,7 @@ namespace ColorLinesNG2.UWP {
 
 				var assembliesToInclude = this.ReferenceAssemblies();
 				Xamarin.Forms.Forms.Init(ev, assembliesToInclude);
-
-				HockeyClient.Current.Configure(APIKeys.HockeyAppUWP);
+				
 				if (ev.PreviousExecutionState == ApplicationExecutionState.Terminated) {
 					//TODO: Load state from previously suspended application
 				}
@@ -125,7 +128,6 @@ namespace ColorLinesNG2.UWP {
 			assembliesToInclude.Add(typeof(Xamarin.Forms.Entry).GetTypeInfo().Assembly);*/
 			assembliesToInclude.Add(typeof(Plugin.Settings.CrossSettings).GetTypeInfo().Assembly);
 /*			assembliesToInclude.Add(typeof(Plugin.Settings.Abstractions.ISettings).GetTypeInfo().Assembly);*/
-			assembliesToInclude.Add(typeof(HockeyClient).GetTypeInfo().Assembly);
 			assembliesToInclude.Add(typeof(SkiaSharp.SKPaint).GetTypeInfo().Assembly);
 /*			assembliesToInclude.Add(typeof(SkiaSharp.SKColor).GetTypeInfo().Assembly);
 			assembliesToInclude.Add(typeof(SkiaSharp.SKBitmap).GetTypeInfo().Assembly);

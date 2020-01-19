@@ -1,7 +1,9 @@
 ﻿using Foundation;
 using UIKit;
 
-using HockeyApp.iOS;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ColorLinesNG2.iOS {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -19,10 +21,7 @@ namespace ColorLinesNG2.iOS {
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options) {
 			UIApplication.SharedApplication.SetStatusBarStyle(UIStatusBarStyle.LightContent, false);
 
-			var manager = BITHockeyManager.SharedHockeyManager;
-			manager.Configure(APIKeys.HockeyAppiOS);
-			manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
-			manager.StartManager();
+			AppCenter.Start(APIKeys.AppCenteriOS, typeof(Analytics), typeof(Crashes));
 
 			global::Xamarin.Forms.Forms.Init();
 			this.LoadApplication(new App());
