@@ -679,6 +679,8 @@ namespace CLDataTypes {
 
 		private bool navigating = false, popping = false;
 		public void Push(string title, Action<float[],bool> drawContent) {
+			if (this.navigating)
+				return;
 			this.navigating = true;
 			if (this.drawContentPrev != null)
 				return;
@@ -692,6 +694,8 @@ namespace CLDataTypes {
 			this.navigating = false;
 		}
 		public void Pop() {
+			if (this.navigating)
+				return;
 			this.navigating = true;
 			this.drawContent(null, false);
 			CLField.PlaySound("MenuNav.mp3");
